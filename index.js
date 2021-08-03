@@ -390,7 +390,7 @@ var mail = nodemailer.createTransport({
 });
 let cron = require('node-cron');
 
-cron.schedule('0 14 * * *', () => {
+cron.schedule('40 16 * * *', () => {
   
 
   Kullanici.find({},function(err,users){
