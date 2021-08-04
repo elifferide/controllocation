@@ -390,7 +390,7 @@ var mail = nodemailer.createTransport({
 });
 let cron = require('node-cron');
 
-cron.schedule('50 16 * * *', () => {
+cron.schedule('25 15 * * *', () => {
   
 
   Kullanici.find({},function(err,users){
@@ -562,7 +562,7 @@ function generateTableRow(doc, y, c1, c2, c3,c4) {
 });
 
 
-/*
+
 app.post('/createPdfReport', (req, res, next) => {
 
   Kullanici.find({},function(err,users){
@@ -729,7 +729,7 @@ function generateTableRow(doc, y, c1, c2, c3,c4) {
 
  
 });
-*/
+
 
 app.post("/updateemail/:id", function (req, res) {
  Kullanici.updateOne(
