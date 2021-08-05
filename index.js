@@ -31,9 +31,7 @@ const multer = require('multer');
 const storage = multerS3({
   s3: s3,
   bucket: 'createlocation',
-  destination: function (req, file, cb) {
-    cb(null,  "./images");
-  },
+  storageClass: 'images',
   key: function(req, file, cb) {
       console.log(file);
       cb(null,  file.originalname +
