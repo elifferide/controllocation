@@ -12,14 +12,34 @@ const { Passport } = require("passport");
 const PDFDocument = require('pdfkit');
 const fs = require('fs')
 
+const S3 = require('aws-sdk/clients/s3');
+const AWS = require('aws-sdk');
+const wasabiEndpoint = new AWS.Endpoint('s3.us-west-1.wasabisys.com');
+const multerS3 = require('multer-s3');
 
+const accessKeyId = '0EKB6R9SEI09NPINC71V'
+const secretAccessKey = 'j8oqmC5TghOMBOofBAWYKegBIDgIVOqvrD7NefUb';
 
-
-
-
+const s3 = new S3({
+  endpoint: wasabiEndpoint,
+  region: 'us-west-1',
+  accessKeyId,
+  secretAccessKey
+});
 
 const multer = require('multer');
-var storage = multer.diskStorage({
+const storage = multerS3({
+  s3: s3,
+  bucket: 'bucket-name',
+  key: function(req, file, cb) {
+      console.log(file);
+      cb(null, file.originalname);
+  }
+})
+
+
+
+/*var storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, __dirname + "/public/resimler");
   },
@@ -33,7 +53,7 @@ var storage = multer.diskStorage({
         ".jpg"
     );
   },
-});
+});*/
 var upload = multer({ storage: storage });
 
 var storage2 = multer.diskStorage({
@@ -330,8 +350,14 @@ app.post("/updatedesc/:id", function (req, res) {
 app.post('/uploadphoto/:id', upload.single('photo'), (req, res, next) => {
   var resimlinki = "";
 
+  try {
+    res.send(req.file);
+    console.log(req.file);
+  } catch (err) {
+    res.send(400);
+  }
 
-  if(req.file){
+  /*if(req.file){
     resimlinki = '/public/resimler/' + req.file.filename;
   }
   
@@ -348,7 +374,7 @@ app.post('/uploadphoto/:id', upload.single('photo'), (req, res, next) => {
         res.send({ sonuc: true });
       }
     }
-  );
+  );*/
 })
 
 
