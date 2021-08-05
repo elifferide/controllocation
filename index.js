@@ -350,18 +350,17 @@ app.post("/updatedesc/:id", function (req, res) {
 
 app.post('/uploadphoto/:id', upload.single('photo'), (req, res, next) => {
   var resimlinki = "";
-
   try {
     res.send(req.file);
-    console.log(req.file);
+    
   } catch (err) {
     res.send(400);
   }
 
-  /*if(req.file){
-    resimlinki = '/public/resimler/' + req.file.filename;
-  }
+  if(req.file){
+    resimlinki = req.fie.location;
   
+  }
   console.log(resimlinki);
   Task.updateOne(
     { _id: req.params.id },
@@ -375,7 +374,7 @@ app.post('/uploadphoto/:id', upload.single('photo'), (req, res, next) => {
         res.send({ sonuc: true });
       }
     }
-  );*/
+  );
 })
 
 
