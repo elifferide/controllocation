@@ -30,8 +30,7 @@ const s3 = new S3({
 const multer = require('multer');
 const storage = multerS3({
   s3: s3,
-  bucket: 'createlocation',
-  storageClass: 'images',
+  bucket: 'createlocation/images',
   key: function(req, file, cb) {
       console.log(file);
       cb(null,  file.originalname +
