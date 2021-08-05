@@ -350,17 +350,10 @@ app.post("/updatedesc/:id", function (req, res) {
 
 app.post('/uploadphoto/:id', upload.single('photo'), (req, res, next) => {
   var resimlinki = "";
-  try {
-    res.send(req.file);
-    
-  } catch (err) {
-    res.send(400);
-  }
-
+ 
   if(req.file){
     resimlinki = req.fie.location;
-  
-  }
+    }
   console.log(resimlinki);
   Task.updateOne(
     { _id: req.params.id },
