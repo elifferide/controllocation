@@ -90,7 +90,7 @@ app.use(bodyParser.json());
 const Schema = mongoose.Schema;
 
 mongoose
-  .connect("mongodb+srv://eferide:1234@cluster0.iqkgy.mongodb.net/Cluster0?retryWrites=true&w=majority", {
+  .connect(process.env.BAGLANTI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
