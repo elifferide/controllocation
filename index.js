@@ -32,11 +32,12 @@ const storage = multerS3({
   s3: s3,
   bucket: 'createlocation',
   destination: function (req, file, cb) {
-    cb(null, __dirname + "/images");
+    cb(null,  "./images");
   },
   key: function(req, file, cb) {
       console.log(file);
-      cb(null, file.originalname);
+      cb(null,  file.originalname +
+        new Date().getMilliseconds());
   }
 })
 
