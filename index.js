@@ -409,9 +409,8 @@ var mail = nodemailer.createTransport({
 });
 let cron = require('node-cron');
 
-cron.schedule('28 15 * * *', () => {
+cron.schedule('38 20 * * *', () => {
   
-
   Kullanici.find({},function(err,users){
     if(err){
       console.log(err);
@@ -425,7 +424,7 @@ cron.schedule('28 15 * * *', () => {
         var id=users[i]._id;
         var planned;
 
-        Task.find({user_id:id,taskDate:today},function (err, gelen) {
+         Task.find({user_id:id,taskDate:today},function (err, gelen) {
           if (!err) {
             if (gelen){
              planned=gelen.length;    
@@ -463,7 +462,8 @@ cron.schedule('28 15 * * *', () => {
  const doc = new PDFDocument();
  if(gelenVeri.length===0){
    console.log("pdf yok");
-   doc.pipe(fs.createWriteStream(`output${index}.pdf`));
+   let writeStream = fs.createWriteStream(`output${index}.pdf`);
+   doc.pipe(writeStream);
     doc
     .fontSize(35)
     .text(`${user.isim} ${user.soyisim}'s Report (${today})`,{align: "center"})
@@ -474,7 +474,7 @@ cron.schedule('28 15 * * *', () => {
     // Finalize PDF file
     doc.end();    
   } else {
-    doc.pipe(fs.createWriteStream(`output${index}.pdf`));
+//    doc.pipe(fs.createWriteStream(`output${index}.pdf`));
     doc
     .fontSize(35)
     .text(`${user.isim} ${user.soyisim}'s Report (${today})`,{align: "center"})
@@ -484,9 +484,33 @@ cron.schedule('28 15 * * *', () => {
     generateTable(doc, gelenVeri);
     // Finalize PDF file
     doc.end();    
-
+    
 console.log("pdf"+index+ " oluştu")  ;
-  }
+
+writeStream.on('finish', function () {
+  var appDir = path.dirname(require.main.filename);
+  const fileContent = fs.readFileSync(appDir + '/output.pdf');
+  var params = {
+      Key : 'fileName',
+      Body : fileContent,
+      Bucket : 'createlocation/report',
+      ContentType : 'application/pdf',
+      ACL: "public-read",
+    } ;
+
+    s3.upload(params, function(err, response) {
+        console.log("pdf"+index+"gönderildi.");
+    });
+  })
+
+ 
+
+}
+
+}
+
+
+
 function generateTable(doc, gelenVeri) {
   let invoiceTableTop = 150;
   generateHr(doc,invoiceTableTop+ 40);
@@ -541,7 +565,7 @@ function generateTableRow(doc, y, c1, c2, c3,c4) {
 }
 
 
-}
+
  
   function sendMail(length,today){
     console.log(length+"/"+today)
@@ -575,8 +599,6 @@ function generateTableRow(doc, y, c1, c2, c3,c4) {
       }
   });
   }
-
-
 
 });
 
