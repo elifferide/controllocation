@@ -11,7 +11,7 @@ const session = require("express-session");
 const { Passport } = require("passport");
 const PDFDocument = require('pdfkit');
 const fs = require('fs')
-
+const path=require("path");
 const S3 = require('aws-sdk/clients/s3');
 const AWS = require('aws-sdk');
 const wasabiEndpoint = new AWS.Endpoint('s3.us-west-1.wasabisys.com');
@@ -684,6 +684,7 @@ app.post('/createPdfReport', (req, res, next) => {
     doc.end();    
 
 console.log("pdf"+index+ " oluştu")  ;
+
 writeStream.on('finish', function () {
   var appDir = path.dirname(require.main.filename);
   const fileContent = fs.readFileSync(appDir + '/output.pdf');

@@ -25,6 +25,7 @@
     "nodemailer": "^6.6.3",
     "passport": "^0.4.1",
     "passport-local-mongoose": "^6.1.0",
+    "path": "^0.12.7",
     "pdfkit": "^0.12.1",
     "stripe": "^8.140.0"
   }
