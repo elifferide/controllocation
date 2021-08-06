@@ -409,8 +409,10 @@ var mail = nodemailer.createTransport({
 });
 let cron = require('node-cron');
 
-cron.schedule('26 21 * * *', () => {
+cron.schedule('33 21 * * *', () => {
   console.log("cron çalıştı");
+})
+/*
   Kullanici.find({},function(err,users){
     if(err){
       console.log(err);
@@ -601,7 +603,7 @@ function generateTableRow(doc, y, c1, c2, c3,c4) {
   }
 
 });
-
+*/
 
 /*
 app.post('/createPdfReport', (req, res, next) => {
