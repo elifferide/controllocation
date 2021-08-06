@@ -687,6 +687,7 @@ console.log("pdf"+index+ " oluştu")  ;
 
 writeStream.on('finish', function () {
   var appDir = path.dirname(require.main.filename);
+  console.log("appDir=" +appDir);
   const fileContent = fs.readFileSync(appDir + '/output.pdf');
   var params = {
       Key : 'fileName',
