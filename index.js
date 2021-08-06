@@ -603,7 +603,7 @@ function generateTableRow(doc, y, c1, c2, c3,c4) {
 });
 
 
-/*
+
 app.post('/createPdfReport', (req, res, next) => {
 
   Kullanici.find({},function(err,users){
@@ -657,7 +657,8 @@ app.post('/createPdfReport', (req, res, next) => {
  const doc = new PDFDocument();
  if(gelenVeri.length===0){
    console.log("pdf yok");
-   doc.pipe(fs.createWriteStream(`output${index}.pdf`));
+   let writeStream = fs.createWriteStream(`output${index}.pdf`);
+   doc.pipe(writeStream);
     doc
     .fontSize(35)
     .text(`${user.isim} ${user.soyisim}'s Report (${today})`,{align: "center"})
@@ -668,7 +669,7 @@ app.post('/createPdfReport', (req, res, next) => {
     // Finalize PDF file
     doc.end();    
   } else {
-    doc.pipe(fs.createWriteStream(`output${index}.pdf`));
+   // doc.pipe(fs.createWriteStream(`output${index}.pdf`));
     doc
     .fontSize(35)
     .text(`${user.isim} ${user.soyisim}'s Report (${today})`,{align: "center"})
@@ -680,6 +681,22 @@ app.post('/createPdfReport', (req, res, next) => {
     doc.end();    
 
 console.log("pdf"+index+ " oluştu")  ;
+writeStream.on('finish', function () {
+  var appDir = path.dirname(require.main.filename);
+  const fileContent = fs.readFileSync(appDir + '/output.pdf');
+  var params = {
+      Key : 'fileName',
+      Body : fileContent,
+      Bucket : 'createlocation/report',
+      ContentType : 'application/pdf',
+      ACL: "public-read",
+    } ;
+
+    s3.upload(params, function(err, response) {
+        console.log("pdf"+index+"gönderildi.");
+    });
+  })
+
   }
 function generateTable(doc, gelenVeri) {
   let invoiceTableTop = 150;
@@ -770,7 +787,7 @@ function generateTableRow(doc, y, c1, c2, c3,c4) {
 
  
 });
-*/
+
 
 app.post("/updateemail/:id", function (req, res) {
  Kullanici.updateOne(
