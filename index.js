@@ -702,7 +702,7 @@ function generateTable(doc, gelenVeri) {
       item.adress,
       item.passedTime,
       item.desc,
-      __dirname+item.photoUrl
+      item.photoUrl
     );
     generateHr(doc, position+ 50);
   }
