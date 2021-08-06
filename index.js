@@ -409,8 +409,8 @@ var mail = nodemailer.createTransport({
 });
 let cron = require('node-cron');
 
-cron.schedule('38 20 * * *', () => {
-  
+cron.schedule('50 20 * * *', () => {
+  console.log("cron çalıştı");
   Kullanici.find({},function(err,users){
     if(err){
       console.log(err);
