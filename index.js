@@ -766,15 +766,17 @@ function generateTableRow(doc, y, c1, c2, c3) {
     var attach=[];
 
     for(let i=0;i<length;i++){
-
+      var appDir = path.dirname(require.main.filename);
+      console.log("appDir=" +appDir);
+      const fileContent = fs.readFileSync(appDir + `/output${index}.pdf`);
       attach.push(
           {filename: `output${i}.pdf`,
           //path:__dirname +'/output.pdf',
-          content: appDir,
+          content:fileContent,
+          //content: fs.createReadStream(__dirname +`/output${i}.pdf`),
           //contentType: 'application/pdf'
       })
     }
-    console.log("send mail");
     console.log(attach);
     var mailOptions = {
       from: 'elff931@gmail.com',
