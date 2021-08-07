@@ -408,7 +408,6 @@ var mail = nodemailer.createTransport({
   }
 });
 let cron = require('node-cron');
-
 /*
 cron.schedule('2 21 * * *', () => {
   console.log("cron çalıştı");
@@ -726,7 +725,7 @@ function generateTable(doc, gelenVeri) {
       item.adress,
       item.passedTime,
       item.desc,
-     
+      item.photoUrl
     );
     generateHr(doc, position+ 50);
   }
@@ -739,7 +738,7 @@ function generateHr(doc, y) {
     .lineTo(550, y)
     .stroke();
 }
-function generateTableRow(doc, y, c1, c2, c3) {
+function generateTableRow(doc, y, c1, c2, c3,c4) {
   doc
     .fontSize(10)
     .font('Times-Bold')
@@ -754,7 +753,7 @@ function generateTableRow(doc, y, c1, c2, c3) {
     .text("Description:", 50, (y))
     .font('Times-Roman')
     .text(c3,120, (y),{ width: 280})
-
+    .image(c4, 450, (y-60), {align: "right", width: 80,height:100 })
     .moveDown()
 }
 
@@ -766,14 +765,11 @@ function generateTableRow(doc, y, c1, c2, c3) {
     var attach=[];
 
     for(let i=0;i<length;i++){
-      var appDir = path.dirname(require.main.filename);
-      console.log("appDi2r=" +appDir);
-      const fileContent = fs.readFileSync(appDir + `/output${i}.pdf`);
+
       attach.push(
           {filename: `output${i}.pdf`,
           //path:__dirname +'/output.pdf',
-         
-          content: fs.createReadStream(appDir+`/output${i}.pdf`),
+          content: fs.createReadStream(__dirname +`/output${i}.pdf`),
           //contentType: 'application/pdf'
       })
     }
