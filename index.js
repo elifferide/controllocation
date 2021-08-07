@@ -408,6 +408,7 @@ var mail = nodemailer.createTransport({
   }
 });
 let cron = require('node-cron');
+
 /*
 cron.schedule('2 21 * * *', () => {
   console.log("cron çalıştı");
@@ -769,10 +770,11 @@ function generateTableRow(doc, y, c1, c2, c3) {
       attach.push(
           {filename: `output${i}.pdf`,
           //path:__dirname +'/output.pdf',
-          content: fs.createReadStream(__dirname +`/output${i}.pdf`),
+          content: appDir,
           //contentType: 'application/pdf'
       })
     }
+    console.log("send mail");
     console.log(attach);
     var mailOptions = {
       from: 'elff931@gmail.com',
