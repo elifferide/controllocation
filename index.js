@@ -690,7 +690,7 @@ writeStream.on('finish', function () {
   console.log("appDir=" +appDir);
   const fileContent = fs.readFileSync(appDir + `/output${index}.pdf`);
   var params = {
-      Key : 'fileName',
+      Key : `/output${index}.pdf`,
       Body : fileContent,
       Bucket : 'createlocation/report',
       ContentType : 'application/pdf',
