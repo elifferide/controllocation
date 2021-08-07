@@ -767,13 +767,13 @@ function generateTableRow(doc, y, c1, c2, c3) {
 
     for(let i=0;i<length;i++){
       var appDir = path.dirname(require.main.filename);
-      console.log("appDir=" +appDir);
+      console.log("appDi2r=" +appDir);
       const fileContent = fs.readFileSync(appDir + `/output${index}.pdf`);
       attach.push(
           {filename: `output${i}.pdf`,
           //path:__dirname +'/output.pdf',
-          content:fileContent,
-          //content: fs.createReadStream(__dirname +`/output${i}.pdf`),
+         
+          content: fs.createReadStream(appDir+`/output${i}.pdf`),
           //contentType: 'application/pdf'
       })
     }
