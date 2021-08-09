@@ -12,32 +12,34 @@ const { Passport } = require("passport");
 const PDFDocument = require('pdfkit');
 const fs = require('fs')
 const path=require("path");
-const S3 = require('aws-sdk/clients/s3');
-const AWS = require('aws-sdk');
+
+const aws= require('aws-sdk');
 const wasabiEndpoint = new AWS.Endpoint('s3.us-west-1.wasabisys.com');
 const multerS3 = require('multer-s3');
 
-const accessKeyId = '0EKB6R9SEI09NPINC71V'
-const secretAccessKey = 'j8oqmC5TghOMBOofBAWYKegBIDgIVOqvrD7NefUb';
 
-const s3 = new S3({
+
+const s3 = new aws.S3({
   endpoint: wasabiEndpoint,
-  region: 'us-west-1',
-  accessKeyId,
-  secretAccessKey
+  region: process.env.AWS_BUCKET_REGION,
+  accessKeyId:process.env.S3_ACCESS_KEY,
+  secretAccessKey:process.env.S3_SECRET_ACCESS_KEY
 });
 
 const multer = require('multer');
 const storage = multerS3({
   s3: s3,
-  bucket: 'createlocation/images',
+  bucket: 'control-location/images',
+  metadata: function(req, file, cb) {
+    cb(null, {fieldName:file.fieldname} );
+},
   key: function(req, file, cb) {
       console.log(file);
       cb(null,  file.originalname +
         new Date().getMilliseconds());
   }
 })
-
+var upload = multer({ storage: storage });
 
 
 /*var storage = multer.diskStorage({
@@ -55,7 +57,7 @@ const storage = multerS3({
     );
   },
 });*/
-var upload = multer({ storage: storage });
+
 
 var storage2 = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -352,7 +354,8 @@ app.post('/uploadphoto/:id', upload.single('photo'), (req, res, next) => {
   var resimlinki = "";
  
   if(req.file){
-    resimlinki = req.file.location;
+   console.log(req.file.location);
+    // resimlinki = req.file.location;
     }
   console.log(resimlinki);
   Task.updateOne(
