@@ -14,13 +14,11 @@ const fs = require('fs')
 const path=require("path");
 
 const aws= require('aws-sdk');
-const wasabiEndpoint = new AWS.Endpoint('s3.us-west-1.wasabisys.com');
 const multerS3 = require('multer-s3');
 
 
 
 const s3 = new aws.S3({
-  endpoint: wasabiEndpoint,
   region: process.env.AWS_BUCKET_REGION,
   accessKeyId:process.env.S3_ACCESS_KEY,
   secretAccessKey:process.env.S3_SECRET_ACCESS_KEY
