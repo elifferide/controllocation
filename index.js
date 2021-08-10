@@ -610,8 +610,8 @@ async function getFileStream(fileKey) {
     Bucket: 'control-location/images'
   }
   const data= await s3.getObject(downloadParams).createReadStream();
-  console.log(data.Body.toString('utf-8'));
-  return data.Body.toString('utf-8');
+  console.log(data);
+  return data.Body.toString();
 }
 
 app.post('/createPdfReport', (req, res, next) => {
