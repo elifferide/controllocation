@@ -606,7 +606,7 @@ function generateTableRow(doc, y, c1, c2, c3,c4) {
 
 async function getFileStream(fileKey) {
   const downloadParams = {
-    Key: fileKey,
+    Key: "images" +fileKey,
     Bucket: 'control-location/images'
   }
   const data= await s3.getObject(downloadParams).createReadStream();
@@ -652,11 +652,11 @@ app.post('/createPdfReport', (req, res, next) => {
                   },
                 ]);
               }
-          })
+        })
            
       }
-      sendMail(users.length,today);
-      }
+     // sendMail(users.length,today);
+    }
     
   });
 
