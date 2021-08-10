@@ -609,9 +609,17 @@ async function getFileStream(fileKey) {
     Key: fileKey,
     Bucket: 'control-location/images'
   }
-  const data= await s3.getObject(downloadParams).createReadStream();
+  const filePath="./images/+fileKey";
+  s3.getObject(downloadParams, (err, data) => {
+    if (err) console.error(err);
+    fs.writeFileSync(filePath, data.Body.toString());
+    console.log(`${filePath} has been created!`);
+  });
+  return filePath;
+  
+ /* const data= await s3.getObject(downloadParams).createReadStream();
   console.log(data);
-  return data.Body.toString();
+  return data.Body.toString();*/
 }
 
 app.post('/createPdfReport', (req, res, next) => {
