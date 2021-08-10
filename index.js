@@ -352,8 +352,8 @@ app.post('/uploadphoto/:id', upload.single('photo'), (req, res, next) => {
   var resimlinki = "";
  
   if(req.file){
-   console.log(req.file.location);
-    resimlinki = req.file.location;
+   console.log(req.file.Key);
+    resimlinki = req.file.Key;
     }
   console.log(resimlinki);
   Task.updateOne(
@@ -604,6 +604,14 @@ function generateTableRow(doc, y, c1, c2, c3,c4) {
 });
 */
 
+function getFileStream(fileKey) {
+  const downloadParams = {
+    Key: fileKey,
+    Bucket: bucketName
+  }
+
+  return s3.getObject(downloadParams).createReadStream()
+}
 
 app.post('/createPdfReport', (req, res, next) => {
 
@@ -655,6 +663,7 @@ app.post('/createPdfReport', (req, res, next) => {
 
  function  createPdf(gelenVeri,user,index,planned,today){
  console.log(gelenVeri);
+
  const doc = new PDFDocument();
  if(gelenVeri.length===0){
    console.log("pdf yok");
@@ -671,6 +680,7 @@ app.post('/createPdfReport', (req, res, next) => {
     // Finalize PDF file
     doc.end();    
   } else {
+ 
     let writeStream = fs.createWriteStream(`output${index}.pdf`);
    doc.pipe(writeStream);
     //doc.pipe(fs.createWriteStream(`output${index}.pdf`));
@@ -719,14 +729,15 @@ function generateTable(doc, gelenVeri) {
     if(i===0){j=i}
     const item = gelenVeri[i];
     const position = invoiceTableTop + (j+1) *120;
-
+    const data=getFileStream(item.photoUrl);
+    console.log(data);
     generateTableRow(
       doc,
       position,
       item.adress,
       item.passedTime,
       item.desc,
-
+      data
     );
     generateHr(doc, position+ 50);
   }
@@ -739,7 +750,7 @@ function generateHr(doc, y) {
     .lineTo(550, y)
     .stroke();
 }
-function generateTableRow(doc, y, c1, c2, c3) {
+function generateTableRow(doc, y, c1, c2, c3,c4) {
   doc
     .fontSize(10)
     .font('Times-Bold')
@@ -754,7 +765,7 @@ function generateTableRow(doc, y, c1, c2, c3) {
     .text("Description:", 50, (y))
     .font('Times-Roman')
     .text(c3,120, (y),{ width: 280})
-  
+    .image(c4, 450, (y-60), {align: "right", width: 80,height:100 })
     .moveDown()
 }
 
