@@ -415,6 +415,7 @@ cron.schedule('2 21 * * *', () => {
   Kullanici.find({},function(err,users){
     if(err){
       console.log(err);
+       console.log(err);
     }else{
       var date = new Date().getDate();
       var month = new Date().getMonth() + 1;
