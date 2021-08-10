@@ -694,7 +694,7 @@ app.post('/createPdfReport', (req, res, next) => {
     // Finalize PDF file
     doc.end();    
 
-console.log("pdf"+index+ " oluştu")  ;
+console.log("pdf"+index+ " oluştu...")  ;
 
 writeStream.on('finish', function () {
   var appDir = path.dirname(require.main.filename);
