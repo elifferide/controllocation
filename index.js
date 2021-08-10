@@ -604,13 +604,13 @@ function generateTableRow(doc, y, c1, c2, c3,c4) {
 });
 */
 
-function getFileStream(fileKey) {
+async function getFileStream(fileKey) {
   const downloadParams = {
     Key: fileKey,
     Bucket: 'control-location/images'
   }
-
-  return s3.getObject(downloadParams).createReadStream()
+  const data= await s3.getObject(downloadParams).createReadStream();
+  return data.Body.toString('utf-8');
 }
 
 app.post('/createPdfReport', (req, res, next) => {
@@ -729,14 +729,14 @@ function generateTable(doc, gelenVeri) {
     if(i===0){j=i}
     const item = gelenVeri[i];
     const position = invoiceTableTop + (j+1) *120;
-
+    const data=getFileStream(item.photoUrl);
     generateTableRow(
       doc,
       position,
       item.adress,
       item.passedTime,
       item.desc,
-      item.photoUrl
+      data
     );
     generateHr(doc, position+ 50);
   }
