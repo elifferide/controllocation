@@ -34,7 +34,7 @@ const storage = multerS3({
   key: function(req, file, cb) {
       console.log(file);
       cb(null,  file.originalname +
-        new Date().getMilliseconds());
+        new Date().getMilliseconds() +".jpg");
   }
 })
 var upload = multer({ storage: storage });
