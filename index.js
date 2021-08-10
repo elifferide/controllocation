@@ -610,6 +610,7 @@ async function getFileStream(fileKey) {
     Bucket: 'control-location/images'
   }
   const data= await s3.getObject(downloadParams).createReadStream();
+  console.log(data.Body.toString('utf-8'));
   return data.Body.toString('utf-8');
 }
 
@@ -709,7 +710,7 @@ writeStream.on('finish', function () {
     } ;
 
     s3.upload(params, function(err, response) {
-      console.log(response);
+      console.log("Upload" + response);
         console.log("pdf"+index+"gönderildi.");
     });
   })
@@ -729,14 +730,14 @@ function generateTable(doc, gelenVeri) {
     if(i===0){j=i}
     const item = gelenVeri[i];
     const position = invoiceTableTop + (j+1) *120;
-    const data=getFileStream(item.photoUrl);
+    const datai=getFileStream(item.photoUrl);
     generateTableRow(
       doc,
       position,
       item.adress,
       item.passedTime,
       item.desc,
-      data
+      datai
     );
     generateHr(doc, position+ 50);
   }
