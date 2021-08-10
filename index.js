@@ -606,7 +606,7 @@ function generateTableRow(doc, y, c1, c2, c3,c4) {
 
 async function getFileStream(fileKey) {
   const downloadParams = {
-    Key: "images" +fileKey,
+    Key: fileKey,
     Bucket: 'control-location/images'
   }
   const data= await s3.getObject(downloadParams).createReadStream();
