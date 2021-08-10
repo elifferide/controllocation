@@ -352,8 +352,8 @@ app.post('/uploadphoto/:id', upload.single('photo'), (req, res, next) => {
   var resimlinki = "";
  
   if(req.file){
-   console.log(req.file.Key);
-    resimlinki = req.file.Key;
+   console.log(req.file);
+    resimlinki = req.file.key;
     }
   console.log(resimlinki);
   Task.updateOne(
