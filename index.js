@@ -729,15 +729,14 @@ function generateTable(doc, gelenVeri) {
     if(i===0){j=i}
     const item = gelenVeri[i];
     const position = invoiceTableTop + (j+1) *120;
-    const data=getFileStream(item.photoUrl);
-    console.log(data);
+
     generateTableRow(
       doc,
       position,
       item.adress,
       item.passedTime,
       item.desc,
-      data
+      item.photoUrl
     );
     generateHr(doc, position+ 50);
   }
