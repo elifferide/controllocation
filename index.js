@@ -353,7 +353,7 @@ app.post('/uploadphoto/:id', upload.single('photo'), (req, res, next) => {
  
   if(req.file){
    console.log(req.file.location);
-    // resimlinki = req.file.location;
+    resimlinki = req.file.location;
     }
   console.log(resimlinki);
   Task.updateOne(
