@@ -33,7 +33,7 @@ const storage = multerS3({
 },
   key: function(req, file, cb) {
       console.log(file);
-      cb(null,  file.originalname +
+      cb(null,  "placesimage" +
         new Date().getMilliseconds() +".jpg");
   }
 })
