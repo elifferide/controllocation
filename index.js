@@ -693,7 +693,7 @@ writeStream.on('finish', function () {
   var params = {
       Key : `output${index}.pdf`,
       Body : fileContent,
-      Bucket : 'createlocation/report',
+      Bucket : 'control-location/reports',
       ContentType : 'application/pdf',
       ACL: "public-read",
     } ;
