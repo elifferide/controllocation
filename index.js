@@ -609,7 +609,16 @@ async function getFileStream(fileKey) {
     Key: fileKey,
     Bucket: 'control-location/images'
   }
-  const filePath="./images/+fileKey";
+  s3.getObject(params, function (err, data) {
+    if (err) {
+        return res.send({ "error": err });
+    }
+    res.send({ data });
+    console.log("S3 den gelen" + data);
+});
+
+
+ /* const filePath="./images/+fileKey";
   s3.getObject(downloadParams, (err, data) => {
     if (err) console.error(err);
     fs.writeFileSync(filePath, data.Body.toString());
@@ -617,7 +626,7 @@ async function getFileStream(fileKey) {
   });
   return filePath;
   
- /* const data= await s3.getObject(downloadParams).createReadStream();
+  const data= await s3.getObject(downloadParams).createReadStream();
   console.log(data);
   return data.Body.toString();*/
 }
@@ -652,7 +661,8 @@ app.post('/createPdfReport', (req, res, next) => {
         }) ;  
 
         Task.find({user_id:id,taskDate:today,desc:{$ne:""},passedTime:{$ne:""},photoUrl:{$ne:""}}, function (err, gelenVeri) {
-            if (!err) {      
+            if (!err) {  
+            
               createPdf(gelenVeri,users[i],i,planned,today);
             } else {
                 res.send([
@@ -673,6 +683,7 @@ app.post('/createPdfReport', (req, res, next) => {
  function  createPdf(gelenVeri,user,index,planned,today){
  console.log(gelenVeri);
 
+ getFileStream(gelenVeri.photoUrl);
  const doc = new PDFDocument();
  if(gelenVeri.length===0){
    console.log("pdf yok");
@@ -745,7 +756,7 @@ function generateTable(doc, gelenVeri) {
       item.adress,
       item.passedTime,
       item.desc,
-     
+    
     );
     generateHr(doc, position+ 50);
   }
