@@ -773,8 +773,8 @@ function generateTable(doc, gelenVeri) {
 
     writeStream2.on('finish', function () {
     var appDir = path.dirname(require.main.filename);
-    console.log("appDir=" +appDir);
-    const fileContent = fs.readFileSync(appDir + `photo${item.taskDate}-${new Date().getMilliseconds()}.jpeg`);
+    console.log("appDir=" +appDir + `/photo${item.taskDate}-${new Date().getMilliseconds()}.jpeg`);
+    const fileContent = fs.readFileSync(appDir + `/photo${item.taskDate}-${new Date().getMilliseconds()}.jpeg`);
     console.log("fileContent=" +fileContent);
     })
    
@@ -785,7 +785,7 @@ function generateTable(doc, gelenVeri) {
       item.adress,
       item.passedTime,
       item.desc,
-      item.photoUrl
+      appDir + `/photo${item.taskDate}-${new Date().getMilliseconds()}.jpeg`
       );
     generateHr(doc, position+ 50);
   }
