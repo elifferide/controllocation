@@ -422,7 +422,7 @@ var mail = nodemailer.createTransport({
   }
 });
 let cron = require('node-cron');
-cron.schedule('30 20 * * *', () => {
+cron.schedule('50 21 * * *', () => {
   console.log("cron çalıştı");
 });
 /*
