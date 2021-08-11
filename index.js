@@ -825,7 +825,7 @@ function generateTableRow(doc, y, c1, c2, c3) {
     console.log(length+"/"+today)
     var attach=[];
 
-    for(let i=0;i<length;i++){
+    /*for(let i=0;i<length;i++){
 
       attach.push(
           {filename: `output${i}.pdf`,
@@ -835,13 +835,13 @@ function generateTableRow(doc, y, c1, c2, c3) {
        
       })
     }
-    console.log(attach);
+    console.log(attach);*/
     var mailOptions = {
       from: 'softlinnsolutions@gmail.com',
       to: 'esali.softlinn@gmail.com',
       subject: "Reports( " +today+" )",
       html: '<b>Hello world attachment test HTML</b>',
-      attachments: attach,
+      
      }
     mail.sendMail(mailOptions, function(error, info){
       if (error) {
