@@ -829,8 +829,8 @@ function generateTableRow(doc, y, c1, c2, c3,c4) {
 
       attach.push(
           {filename: `output${i}.pdf`,
-          //path:__dirname +'/output.pdf',
-          content: fs.createReadStream(__dirname +`/output${i}.pdf`),
+          path:'https://control-location.s3.amazonaws.com/reports/output0.pdf' +`output${i}.pdf`,
+          //content: fs.createReadStream(__dirname +`/output${i}.pdf`),
           //contentType: 'application/pdf'
       })
     }
