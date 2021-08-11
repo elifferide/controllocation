@@ -422,8 +422,9 @@ var mail = nodemailer.createTransport({
   }
 });
 let cron = require('node-cron');
-
-
+cron.schedule('30 19 * * *', () => {
+  console.log("cron çalıştı");
+});
 /*
 cron.schedule('2 21 * * *', () => {
   console.log("cron çalıştı");
@@ -617,6 +618,7 @@ function generateTableRow(doc, y, c1, c2, c3,c4) {
   }
 
 });
+*/
 
 function getFileStream(fileKey) {
   const params = {
@@ -625,11 +627,9 @@ function getFileStream(fileKey) {
   }
 
 return  s3.getObject(params).createReadStream();
-
-
 }
 
-*/
+
 
 
 
@@ -698,14 +698,15 @@ app.post('/createPdfReport', (req, res, next) => {
 
 
  function  createPdf(gelenVeri,user,index,planned,today){
- console.log("GelenVeri="+gelenVeri);
+  console.log("GelenVeri="+gelenVeri);
  
- const doc = new PDFDocument();
- if(gelenVeri.length===0){
+  const doc = new PDFDocument();
+
+  if(gelenVeri.length===0){
    console.log("pdf yok");
    let writeStream = fs.createWriteStream(`output${index}.pdf`);
    doc.pipe(writeStream);
-  // doc.pipe(fs.createWriteStream(`output${index}.pdf`));
+    // doc.pipe(fs.createWriteStream(`output${index}.pdf`));
     doc
     .fontSize(35)
     .text(`${user.isim} ${user.soyisim}'s Report (${today})`,{align: "center"})
@@ -715,10 +716,10 @@ app.post('/createPdfReport', (req, res, next) => {
   
     // Finalize PDF file
     doc.end();    
-  } else {
+  } else  {
  
     let writeStream = fs.createWriteStream(`output${index}.pdf`);
-   doc.pipe(writeStream);
+    doc.pipe(writeStream);
     //doc.pipe(fs.createWriteStream(`output${index}.pdf`));
     doc
     .fontSize(35)
@@ -730,26 +731,26 @@ app.post('/createPdfReport', (req, res, next) => {
     // Finalize PDF file
     doc.end();    
 
-console.log("pdf"+index+ " oluştu...")  ;
+    console.log("pdf"+index+ " oluştu...")  ;
 
-writeStream.on('finish', function () {
-  var appDir = path.dirname(require.main.filename);
-  console.log("appDir=" +appDir);
-  const fileContent = fs.readFileSync(appDir + `/output${index}.pdf`);
-  var params = {
-      Key : `output${index}.pdf`,
-      Body : fileContent,
-      Bucket : 'control-location/reports',
-      ContentType : 'application/pdf',
-      ACL: "public-read",
-    } ;
+    writeStream.on('finish', function () {
+      var appDir = path.dirname(require.main.filename);
+      console.log("appDir=" +appDir);
+      const fileContent = fs.readFileSync(appDir + `/output${index}.pdf`);
+      var params = {
+        Key : `output${index}.pdf`,
+        Body : fileContent,
+        Bucket : 'control-location/reports',
+        ContentType : 'application/pdf',
+        ACL: "public-read",
+      } ;
 
-    s3.upload(params, function(err, response) {
-      console.log("pdf"+index+"gönderildi.");
-    });
-  })
-
+      s3.upload(params, function(err, response) {
+        console.log("pdf"+index+"gönderildi.");
+      });
+    })
   }
+
 function generateTable(doc, gelenVeri) {
   let invoiceTableTop = 150;
   generateHr(doc,invoiceTableTop+ 40);
@@ -764,16 +765,19 @@ function generateTable(doc, gelenVeri) {
     if(i===0){j=i}
     const item = gelenVeri[i];
     const position = invoiceTableTop + (j+1) *120;
-  /*  const imagepath=getFileStream(item.photoUrl);
-    var writeStream2 = fs.createWriteStream(item.photoUrl);
-   const urlimage= imagepath.pipe(writeStream2);
-   writeStream2.on('finish', function () {
+    
+    const readStream=getFileStream(item.photoUrl);
+
+    var writeStream2 = fs.createWriteStream(`photo${item.taskDate}-${new Date.now}.jpeg`);
+    readStream.pipe(writeStream2);
+    
+    writeStream2.on('finish', function () {
     var appDir = path.dirname(require.main.filename);
     console.log("appDir=" +appDir);
-    const fileContent = fs.readFileSync(appDir + `/output${index}.pdf`);
-console.log("fileContent=" +fileContent);
+    const fileContent = fs.readFileSync(appDir + `photo${item.taskDate}-${new Date.now}.jpeg`);
+    console.log("fileContent=" +fileContent);
     })
-  */
+   
    
     generateTableRow(
       doc,
