@@ -39,6 +39,19 @@ const storage = multerS3({
 })
 var upload = multer({ storage: storage });
 
+const storage2 = multerS3({
+  s3: s3,
+  bucket: 'control-location/images',
+  metadata: function(req, file, cb) {
+    cb(null, {fieldName:file.fieldname} );
+},
+  key: function(req, file, cb) {
+      console.log(file);
+      cb(null,  "user" +
+        new Date().getMilliseconds() +".jpeg");
+  }
+})
+var upload2 = multer({ storage: storage2 });
 
 /*var storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -54,7 +67,7 @@ var upload = multer({ storage: storage });
         ".jpg"
     );
   },
-});*/
+});
 
 
 var storage2 = multer.diskStorage({
@@ -73,7 +86,7 @@ var storage2 = multer.diskStorage({
   },
 });
 var upload2 = multer({ storage: storage2 });
-
+*/
 
 app.use(
   cors({
@@ -377,7 +390,7 @@ app.post('/uploadUserPhoto/:id', upload2.single('photo'), (req, res, next) => {
 
 
   if(req.file){
-    userresimlinki = '/public/resimler/user/' + req.file.filename;
+    userresimlinki = req.file.location;
   }
   Kullanici.updateOne(
     { _id: req.params.id },
