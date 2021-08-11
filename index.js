@@ -611,10 +611,9 @@ async function getFileStream(fileKey) {
   }
   s3.getObject(params, function (err, data) {
     if (err) {
-        return res.send({ "error": err });
+        console.log({ "error": err });
     }
-    res.send({ data });
-    console.log("S3 den gelen" + data);
+       console.log("S3 den gelen" + data);
 });
 
 
