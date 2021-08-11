@@ -603,18 +603,24 @@ function generateTableRow(doc, y, c1, c2, c3,c4) {
 
 });
 */
-
-async function getFileStream(fileKey) {
+ function getFileStream(fileKey) {
   const params = {
     Key: fileKey,
     Bucket: 'control-location/images'
   }
-  s3.getObject(params, function (err, data) {
-    if (err) {
-        console.log({ "error": err });
-    }
-       console.log("S3 den gelen" + data);
-});
+  return s3.getObject(params).createReadStream()
+};
+
+app.get('/images/:key', (req, res) => {
+  console.log(req.params)
+  const key = req.params.key
+  const readStream = getFileStream(key)
+  
+  readStream.pipe(res)
+})
+
+
+
 
 
  /* const filePath="./images/+fileKey";
@@ -628,7 +634,7 @@ async function getFileStream(fileKey) {
   const data= await s3.getObject(downloadParams).createReadStream();
   console.log(data);
   return data.Body.toString();*/
-}
+
 
 app.post('/createPdfReport', (req, res, next) => {
 
@@ -681,8 +687,6 @@ app.post('/createPdfReport', (req, res, next) => {
 
  function  createPdf(gelenVeri,user,index,planned,today){
  console.log("GelenVeri="+gelenVeri);
-
- getFileStream(gelenVeri.photoUrl);
  console.log("PhotoUrl" +gelenVeri.photoUrl);
  const doc = new PDFDocument();
  if(gelenVeri.length===0){
@@ -756,7 +760,7 @@ function generateTable(doc, gelenVeri) {
       item.adress,
       item.passedTime,
       item.desc,
-    
+      `/images/${item.photoUrl}`
     );
     generateHr(doc, position+ 50);
   }
@@ -769,7 +773,7 @@ function generateHr(doc, y) {
     .lineTo(550, y)
     .stroke();
 }
-function generateTableRow(doc, y, c1, c2, c3) {
+function generateTableRow(doc, y, c1, c2, c3,c4) {
   doc
     .fontSize(10)
     .font('Times-Bold')
@@ -784,7 +788,7 @@ function generateTableRow(doc, y, c1, c2, c3) {
     .text("Description:", 50, (y))
     .font('Times-Roman')
     .text(c3,120, (y),{ width: 280})
-    
+    .image(c4, 450, (y-60), {align: "right", width: 80,height:100 })
     .moveDown()
 }
 
