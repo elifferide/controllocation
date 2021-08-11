@@ -799,7 +799,7 @@ function generateHr(doc, y) {
     .stroke();
 }
 function generateTableRow(doc, y, c1, c2, c3) {
-  console.log("C4="+c4);
+  
   doc
   .fontSize(10)
   .font('Times-Bold')
