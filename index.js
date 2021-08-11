@@ -409,6 +409,7 @@ var mail = nodemailer.createTransport({
   }
 });
 let cron = require('node-cron');
+const { lineTo } = require("pdfkit");
 /*
 cron.schedule('2 21 * * *', () => {
   console.log("cron çalıştı");
@@ -614,9 +615,10 @@ function getFileStream(fileKey) {
   file.on('finish', function () {
   var appDir = path.dirname(require.main.filename);
   console.log("appDir=" +appDir);
-  const fileContent = fs.readFileSync(appDir + `/${fileKey}`);
+  let fileContent = fs.readFileSync(appDir + `/${fileKey}`);
+  return fileContent;
 });
-return fileContent;
+
 }
 
 
