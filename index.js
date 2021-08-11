@@ -609,15 +609,9 @@ function getFileStream(fileKey) {
     Key: fileKey,
     Bucket: 'control-location/images'
   }
-  var file =fs.createWriteStream(fileKey);
 
-  s3.getObject(params).createReadStream().pipe(file);
-  file.on('finish', function () {
-  var appDir = path.dirname(require.main.filename);
-  console.log("appDir=" +appDir);
-  let fileContent = fs.readFileSync(appDir + `/${fileKey}`);
-  return fileContent;
-});
+return  s3.getObject(params).createReadStream();
+
 
 }
 
@@ -764,7 +758,7 @@ function generateTable(doc, gelenVeri) {
       item.adress,
       item.passedTime,
       item.desc,
-      `/images/${item.photoUrl}`
+      
     );
     generateHr(doc, position+ 50);
   }
