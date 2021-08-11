@@ -714,8 +714,9 @@ app.post('/createPdfReport', (req, res, next) => {
     .fontSize(25)
     .text(`Planned: ${planned}  Visited: 0`,{align: "center"})
    
+  
     // Finalize PDF file
-    doc.end();   
+    doc.end();    
     writeStream.on('finish', function () {
       var appDir = path.dirname(require.main.filename);
       console.log("appDir=" +appDir);
@@ -731,7 +732,7 @@ app.post('/createPdfReport', (req, res, next) => {
       s3.upload(params, function(err, response) {
         console.log("pdf"+index+"gönderildi.");
       });
-    }) 
+    })
   } else  {
  
     let writeStream = fs.createWriteStream(`output${index}.pdf`);
@@ -856,7 +857,7 @@ function generateTableRow(doc, y, c1, c2, c3) {
       to: 'esali.softlinn@gmail.com',
       subject: "Reports( " +today+" )",
       html: '<b>Hello world attachment test HTML</b>',
-      
+      attachments: attach,
      }
     mail.sendMail(mailOptions, function(error, info){
       if (error) {
