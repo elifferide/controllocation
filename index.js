@@ -746,7 +746,7 @@ app.post('/createPdfReport', (req, res, next) => {
       } ;
 
       s3.upload(params, function(err, response) {
-        console.log("pdf"+index+"gönderildi.");
+        console.log("pdf"+index+" gönderildi.");
       });
     })
   }
