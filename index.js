@@ -34,7 +34,7 @@ const storage = multerS3({
   key: function(req, file, cb) {
       console.log(file);
       cb(null,  "placesimage" +
-        new Date().getMilliseconds() +".jpg");
+        new Date().getMilliseconds() +".jpeg");
   }
 })
 var upload = multer({ storage: storage });
@@ -352,8 +352,8 @@ app.post('/uploadphoto/:id', upload.single('photo'), (req, res, next) => {
   var resimlinki = "";
  
   if(req.file){
-   console.log(req.file);
-    resimlinki = req.file.key;
+   console.log(req.file.location);
+    resimlinki = req.file.location;
     }
   console.log(resimlinki);
   Task.updateOne(
@@ -604,7 +604,7 @@ function generateTableRow(doc, y, c1, c2, c3,c4) {
   }
 
 });
-*/
+
 function getFileStream(fileKey) {
   const params = {
     Key: fileKey,
@@ -616,7 +616,7 @@ return  s3.getObject(params).createReadStream();
 
 }
 
-
+*/
 
 
 
@@ -751,7 +751,7 @@ function generateTable(doc, gelenVeri) {
     if(i===0){j=i}
     const item = gelenVeri[i];
     const position = invoiceTableTop + (j+1) *120;
-    const imagepath=getFileStream(item.photoUrl);
+  /*  const imagepath=getFileStream(item.photoUrl);
     var writeStream2 = fs.createWriteStream(item.photoUrl);
    const urlimage= imagepath.pipe(writeStream2);
    writeStream2.on('finish', function () {
@@ -760,7 +760,7 @@ function generateTable(doc, gelenVeri) {
     const fileContent = fs.readFileSync(appDir + `/output${index}.pdf`);
 console.log("fileContent=" +fileContent);
     })
-  
+  */
    
     generateTableRow(
       doc,
