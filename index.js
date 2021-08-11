@@ -603,21 +603,18 @@ function generateTableRow(doc, y, c1, c2, c3,c4) {
 
 });
 */
- function getFileStream(fileKey) {
+function getFileStream(fileKey) {
   const params = {
     Key: fileKey,
     Bucket: 'control-location/images'
   }
-  return s3.getObject(params).createReadStream()
+  var file = require('fs').createWriteStream(fileKey);
+  return s3.getObject(params).createReadStream().pipe(file);
 };
 
-app.get('/images/:key', (req, res) => {
-  console.log(req.params)
-  const key = req.params.key
-  const readStream = getFileStream(key)
-  
-  readStream.pipe(res)
-})
+
+
+
 
 
 
@@ -687,7 +684,7 @@ app.post('/createPdfReport', (req, res, next) => {
 
  function  createPdf(gelenVeri,user,index,planned,today){
  console.log("GelenVeri="+gelenVeri);
- console.log("PhotoUrl" +gelenVeri.photoUrl);
+ 
  const doc = new PDFDocument();
  if(gelenVeri.length===0){
    console.log("pdf yok");
@@ -753,7 +750,8 @@ function generateTable(doc, gelenVeri) {
     if(i===0){j=i}
     const item = gelenVeri[i];
     const position = invoiceTableTop + (j+1) *120;
-    
+    const imagepath=getFileStream(item.photoUrl);
+    console.log("image Path= " +imagepath)
     generateTableRow(
       doc,
       position,
