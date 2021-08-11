@@ -640,12 +640,13 @@ return  s3.getObject(params).createReadStream();
     if (err) console.error(err);
     fs.writeFileSync(filePath, data.Body.toString());
     console.log(`${filePath} has been created!`);
+    console.log(`${filePath} has been created!`);
   });
   return filePath;
   
   const data= await s3.getObject(downloadParams).createReadStream();
   console.log(data);
-  return data.Body.toString();*/
+  return data.Body.toString(); */
 
 
 app.post('/createPdfReport', (req, res, next) => {
