@@ -610,7 +610,7 @@ function getFileStream(fileKey) {
     Bucket: 'control-location/images'
   }
 
-return  s3.getObject(params).createReadStream();
+return  s3.getObject(params).createReadStream().pipe();
 
 
 }
