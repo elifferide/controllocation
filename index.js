@@ -768,7 +768,7 @@ console.log("fileContent=" +fileContent);
       item.adress,
       item.passedTime,
       item.desc,
-      
+      item.photoUrl
       );
     generateHr(doc, position+ 50);
   }
@@ -781,7 +781,7 @@ function generateHr(doc, y) {
     .lineTo(550, y)
     .stroke();
 }
-function generateTableRow(doc, y, c1, c2, c3) {
+function generateTableRow(doc, y, c1, c2, c3,c4) {
   doc
     .fontSize(10)
     .font('Times-Bold')
@@ -796,7 +796,7 @@ function generateTableRow(doc, y, c1, c2, c3) {
     .text("Description:", 50, (y))
     .font('Times-Roman')
     .text(c3,120, (y),{ width: 280})
-    
+    .image(c4, 450, (y-60), {align: "right", width: 80,height:100 })
     .moveDown()
 }
 
