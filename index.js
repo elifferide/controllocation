@@ -770,10 +770,11 @@ function generateTable(doc, gelenVeri) {
 
     var writeStream2 = fs.createWriteStream(`photo${item.taskDate}-${new Date().getMilliseconds()}.jpeg`);
     readStream.pipe(writeStream2);
-
+    var pathDir;
     writeStream2.on('finish', function () {
     var appDir = path.dirname(require.main.filename);
     console.log("appDir=" +appDir + `/photo${item.taskDate}-${new Date().getMilliseconds()}.jpeg`);
+    pathDir=appDir + `/photo${item.taskDate}-${new Date().getMilliseconds()}.jpeg`
     const fileContent = fs.readFileSync(appDir + `/photo${item.taskDate}-${new Date().getMilliseconds()}.jpeg`);
     console.log("fileContent=" +fileContent);
     })
@@ -785,7 +786,7 @@ function generateTable(doc, gelenVeri) {
       item.adress,
       item.passedTime,
       item.desc,
-      appDir + `/photo${item.taskDate}-${new Date().getMilliseconds()}.jpeg`
+      pathDir
       );
     generateHr(doc, position+ 50);
   }
