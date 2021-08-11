@@ -683,6 +683,7 @@ app.post('/createPdfReport', (req, res, next) => {
  console.log(gelenVeri);
 
  getFileStream(gelenVeri.photoUrl);
+ console.log("PhotoUrl" +gelenVeri.photoUrl);
  const doc = new PDFDocument();
  if(gelenVeri.length===0){
    console.log("pdf yok");
