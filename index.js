@@ -714,9 +714,24 @@ app.post('/createPdfReport', (req, res, next) => {
     .fontSize(25)
     .text(`Planned: ${planned}  Visited: 0`,{align: "center"})
    
-  
     // Finalize PDF file
-    doc.end();    
+    doc.end();   
+    writeStream.on('finish', function () {
+      var appDir = path.dirname(require.main.filename);
+      console.log("appDir=" +appDir);
+      const fileContent = fs.readFileSync(appDir + `/output${index}.pdf`);
+      var params = {
+        Key : `output${index}.pdf`,
+        Body : fileContent,
+        Bucket : 'control-location/reports',
+        ContentType : 'application/pdf',
+        ACL: "public-read",
+      } ;
+
+      s3.upload(params, function(err, response) {
+        console.log("pdf"+index+"gönderildi.");
+      });
+    }) 
   } else  {
  
     let writeStream = fs.createWriteStream(`output${index}.pdf`);
@@ -825,7 +840,7 @@ function generateTableRow(doc, y, c1, c2, c3) {
     console.log(length+"/"+today)
     var attach=[];
 
-    /*for(let i=0;i<length;i++){
+    for(let i=0;i<length;i++){
 
       attach.push(
           {filename: `output${i}.pdf`,
@@ -835,7 +850,7 @@ function generateTableRow(doc, y, c1, c2, c3) {
        
       })
     }
-    console.log(attach);*/
+    console.log(attach);
     var mailOptions = {
       from: 'softlinnsolutions@gmail.com',
       to: 'esali.softlinn@gmail.com',
