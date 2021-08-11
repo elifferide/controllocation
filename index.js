@@ -409,8 +409,8 @@ var mail = nodemailer.createTransport({
   }
 });
 let cron = require('node-cron');
-const { lineTo } = require("pdfkit");
-const { ConfigurationServicePlaceholders } = require("aws-sdk/lib/config_service_placeholders");
+
+
 /*
 cron.schedule('2 21 * * *', () => {
   console.log("cron çalıştı");
