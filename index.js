@@ -414,15 +414,15 @@ var mail = nodemailer.createTransport({
   service: 'gmail',
   secure: true,
   auth: {
-    user: 'elff931@gmail.com',
-    pass: 'efb40978'
+    user: process.env.USER_MAIL,
+    pass: process.env.USER_MAIL_PASSWORD
   },
   tls:{
     rejectUnauthorized:false,
   }
 });
 let cron = require('node-cron');
-cron.schedule('30 19 * * *', () => {
+cron.schedule('30 20 * * *', () => {
   console.log("cron çalıştı");
 });
 /*
@@ -772,11 +772,11 @@ function generateTable(doc, gelenVeri) {
     var writeStream2 = fs.createWriteStream(`photo${item.taskDate}-${new Date().getMilliseconds()}.jpeg`);
     readStream.pipe(writeStream2);
     var pathDir;
-    writeStream2.on('finish', function () {
+    
     var appDir = path.dirname(require.main.filename);
     console.log("appDir=" +appDir + `/photo${item.taskDate}-${new Date().getMilliseconds()}.jpeg`);
     pathDir=appDir + `/photo${item.taskDate}-${new Date().getMilliseconds()}.jpeg`
-    })
+    
    
    
     generateTableRow(
@@ -836,7 +836,7 @@ function generateTableRow(doc, y, c1, c2, c3,c4) {
     }
     console.log(attach);
     var mailOptions = {
-      from: 'elff931@gmail.com',
+      from: 'softlinnsolutions@gmail.com',
       to: 'esali.softlinn@gmail.com',
       subject: "Reports( " +today+" )",
       html: '<b>Hello world attachment test HTML</b>',
