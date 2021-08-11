@@ -680,7 +680,7 @@ app.post('/createPdfReport', (req, res, next) => {
 
 
  function  createPdf(gelenVeri,user,index,planned,today){
- console.log(gelenVeri);
+ console.log("GelenVeri="+gelenVeri);
 
  getFileStream(gelenVeri.photoUrl);
  console.log("PhotoUrl" +gelenVeri.photoUrl);
