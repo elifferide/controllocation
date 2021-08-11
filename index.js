@@ -746,7 +746,7 @@ app.post('/createPdfReport', (req, res, next) => {
       } ;
 
       s3.upload(params, function(err, response) {
-        console.log("pdf"+index+" gönderildi.");
+        console.log("pdf"+index+"gönderildi.");
       });
     })
   }
@@ -768,7 +768,7 @@ function generateTable(doc, gelenVeri) {
     
     const readStream=getFileStream(item.photoUrl);
 
-    var writeStream2 = fs.createWriteStream(`photo${item.taskDate}-${new Date.now}.jpeg`);
+    var writeStream2 = fs.createWriteStream(`photo${item.taskDate}-${new Date().getMilliseconds()}.jpeg`);
     readStream.pipe(writeStream2);
 
     writeStream2.on('finish', function () {
