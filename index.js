@@ -776,7 +776,6 @@ function generateTable(doc, gelenVeri) {
     var appDir = path.dirname(require.main.filename);
     console.log("appDir=" +appDir + `/photo${item.taskDate}-${new Date().getMilliseconds()}.jpeg`);
     pathDir=appDir + `/photo${item.taskDate}-${new Date().getMilliseconds()}.jpeg`
-
     })
    
    
@@ -800,6 +799,7 @@ function generateHr(doc, y) {
     .stroke();
 }
 function generateTableRow(doc, y, c1, c2, c3,c4) {
+  console.log(c4);
   doc
     .fontSize(10)
     .font('Times-Bold')
@@ -814,7 +814,7 @@ function generateTableRow(doc, y, c1, c2, c3,c4) {
     .text("Description:", 50, (y))
     .font('Times-Roman')
     .text(c3,120, (y),{ width: 280})
-    .image(c4, 450, (y-60), {align: "right", width: 80,height:100 })
+    .image(c4, 450, (y-60))
     .moveDown()
 }
 
