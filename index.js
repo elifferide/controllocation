@@ -610,7 +610,7 @@ function getFileStream(fileKey) {
     Bucket: 'control-location/images'
   }
 
-return  s3.getObject(params).createReadStream().pipe();
+return  s3.getObject(params).createReadStream();
 
 
 }
@@ -751,7 +751,9 @@ function generateTable(doc, gelenVeri) {
     const item = gelenVeri[i];
     const position = invoiceTableTop + (j+1) *120;
     const imagepath=getFileStream(item.photoUrl);
-    console.log("image Path= " +imagepath)
+    var writeStream2 = fs.createWriteStream(item.photoUrl);
+   const urlimage= imagepath.pipe(writeStream2);
+    console.log("image Path= " +urlimage)
     generateTableRow(
       doc,
       position,
@@ -759,7 +761,7 @@ function generateTable(doc, gelenVeri) {
       item.passedTime,
       item.desc,
       
-    );
+      );
     generateHr(doc, position+ 50);
   }
 }
