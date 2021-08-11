@@ -605,7 +605,7 @@ function generateTableRow(doc, y, c1, c2, c3,c4) {
 */
 
 async function getFileStream(fileKey) {
-  const downloadParams = {
+  const params = {
     Key: fileKey,
     Bucket: 'control-location/images'
   }
