@@ -608,11 +608,16 @@ function getFileStream(fileKey) {
     Key: fileKey,
     Bucket: 'control-location/images'
   }
-  var file = require('fs').createWriteStream(fileKey);
-  return s3.getObject(params).createReadStream().pipe(file);
-};
+  var file =fs.createWriteStream(fileKey);
 
-
+  s3.getObject(params).createReadStream().pipe(file);
+  file.on('finish', function () {
+  var appDir = path.dirname(require.main.filename);
+  console.log("appDir=" +appDir);
+  const fileContent = fs.readFileSync(appDir + `/${fileKey}`);
+});
+return fileContent;
+}
 
 
 
@@ -730,8 +735,7 @@ writeStream.on('finish', function () {
     } ;
 
     s3.upload(params, function(err, response) {
-      console.log("Upload" + response);
-        console.log("pdf"+index+"gönderildi.");
+      console.log("pdf"+index+"gönderildi.");
     });
   })
 
