@@ -776,8 +776,7 @@ function generateTable(doc, gelenVeri) {
     var appDir = path.dirname(require.main.filename);
     console.log("appDir=" +appDir + `/photo${item.taskDate}-${new Date().getMilliseconds()}.jpeg`);
     pathDir=appDir + `/photo${item.taskDate}-${new Date().getMilliseconds()}.jpeg`
-    const fileContent = fs.readFileSync(appDir + `/photo${item.taskDate}-${new Date().getMilliseconds()}.jpeg`);
-    console.log("fileContent=" +fileContent);
+
     })
    
    
@@ -787,7 +786,7 @@ function generateTable(doc, gelenVeri) {
       item.adress,
       item.passedTime,
       item.desc,
-  
+      pathDir
       );
     generateHr(doc, position+ 50);
   }
