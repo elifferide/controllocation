@@ -7,6 +7,7 @@ const cors = require("cors");
 const passport = require("passport");
 const passportLocalMongoose = require("passport-local-mongoose");
 const session = require("express-session");
+const axios = require('axios');
 
 const { Passport } = require("passport");
 const PDFDocument = require('pdfkit');
@@ -16,7 +17,7 @@ const S3=require("aws-sdk/clients/s3");
 const aws= require('aws-sdk');
 const multerS3 = require('multer-s3');
 
-
+const Kullanici = require("./models/kullaniciModel");
 
 const s3 = new aws.S3({
   region: process.env.AWS_BUCKET_REGION,
@@ -138,7 +139,7 @@ const taskshema = {
 
 };
 const Task = mongoose.model("Task", taskshema);
-
+/*
 //User Schema
 const kullaniciSema = new mongoose.Schema({
   isim: String,
@@ -157,7 +158,7 @@ kullaniciSema.plugin(passportLocalMongoose, {
 });
 
 const Kullanici = mongoose.model("Kullanici", kullaniciSema);
-
+*/
 passport.use(Kullanici.createStrategy()); // Kullanıcı Şeması ile passport arasında bağlantı kurduk.
 
 passport.serializeUser(function (user, done) {
@@ -618,7 +619,8 @@ function generateTableRow(doc, y, c1, c2, c3,c4) {
   }
 
 });
-*/
+
+//.....
 
 function getFileStream(fileKey) {
   const params = {
@@ -630,12 +632,7 @@ return  s3.getObject(params).createReadStream();
 }
 
 
-
-
-
-
-
- /* const filePath="./images/+fileKey";
+const filePath="./images/+fileKey";
   s3.getObject(downloadParams, (err, data) => {
     if (err) console.error(err);
     fs.writeFileSync(filePath, data.Body.toString());
@@ -646,7 +643,10 @@ return  s3.getObject(params).createReadStream();
   
   const data= await s3.getObject(downloadParams).createReadStream();
   console.log(data);
-  return data.Body.toString(); */
+  return data.Body.toString(); 
+ //...... 
+  
+  */
 
 
 app.post('/createPdfReport', (req, res, next) => {
@@ -682,6 +682,7 @@ app.post('/createPdfReport', (req, res, next) => {
             if (!err) {  
             
               createPdf(gelenVeri,users[i],i,planned,today);
+
             } else {
                 res.send([
                   {
@@ -689,34 +690,34 @@ app.post('/createPdfReport', (req, res, next) => {
                   },
                 ]);
               }
-        })
-           
+        })           
       }
-     sendMail(users.length,today);
-    }
-    
+     
+      sendMail(users.length,today);
+
+    } 
   });
-
-
- function  createPdf(gelenVeri,user,index,planned,today){
-  console.log("GelenVeri="+gelenVeri);
+  
  
-  const doc = new PDFDocument();
 
-  if(gelenVeri.length===0){
-   console.log("pdf yok");
+function  createPdf(gelenVeri,user,index,planned,today){
+console.log("GelenVeri="+gelenVeri);
+ 
+const doc = new PDFDocument();
+
+if(gelenVeri.length===0){
+   console.log("pdf boş"); // User's visited task is zero
    let writeStream = fs.createWriteStream(`output${index}.pdf`);
-   doc.pipe(writeStream);
+   //Pdf creation begins
+    doc.pipe(writeStream);
     // doc.pipe(fs.createWriteStream(`output${index}.pdf`));
     doc
-    .fontSize(35)
-    .text(`${user.isim} ${user.soyisim}'s Report (${today})`,{align: "center"})
-    .fontSize(25)
-    .text(`Planned: ${planned}  Visited: 0`,{align: "center"})
-   
-  
-    // Finalize PDF file
+     .fontSize(35)
+     .text(`${user.isim} ${user.soyisim}'s Report (${today})`,{align: "center"})
+     .fontSize(25)
+     .text(`Planned: ${planned}  Visited: 0`,{align: "center"})
     doc.end();    
+   // Finalize PDF file then send S3
     writeStream.on('finish', function () {
       var appDir = path.dirname(require.main.filename);
       console.log("appDir=" +appDir);
@@ -733,9 +734,10 @@ app.post('/createPdfReport', (req, res, next) => {
         console.log("pdf"+index+"gönderildi.");
       });
     })
-  } else  {
- 
+} else  {
+    // There are user's visited tasks. 
     let writeStream = fs.createWriteStream(`output${index}.pdf`);
+    //Pdf creation begins
     doc.pipe(writeStream);
     //doc.pipe(fs.createWriteStream(`output${index}.pdf`));
     doc
@@ -745,11 +747,10 @@ app.post('/createPdfReport', (req, res, next) => {
     .text(`Planned: ${planned}  Visited: ${gelenVeri.length}`,{align: "center"})
    
     generateTable(doc, gelenVeri);
-    // Finalize PDF file
+    
     doc.end();    
-
     console.log("pdf"+index+ " oluştu...")  ;
-
+    // Finalize PDF file then send S3
     writeStream.on('finish', function () {
       var appDir = path.dirname(require.main.filename);
       console.log("appDir=" +appDir);
@@ -767,24 +768,23 @@ app.post('/createPdfReport', (req, res, next) => {
       });
     })
   }
+}   
 
 function generateTable(doc, gelenVeri) {
-  let invoiceTableTop = 150;
-  generateHr(doc,invoiceTableTop+ 40);
-
-  for (let i = 0; i < gelenVeri.length; i++) {
+let invoiceTableTop = 150;
+generateHr(doc,invoiceTableTop+ 40);
+for (let i = 0; i < gelenVeri.length; i++) {
    let j=i;
     if(i%4===0 && i!==0){
       j=0;
       doc
       .addPage(); 
-    } if(i%4===1){j=1} if(i%4===2){j=2} if(i%4===3){j=3}  
-    if(i===0){j=i}
+    } 
+    if(i%4===1){j=1} if(i%4===2){j=2} if(i%4===3){j=3} if(i===0){j=i}
+
     const item = gelenVeri[i];
     const position = invoiceTableTop + (j+1) *120;
-    
-    const readStream=getFileStream(item.photoUrl);
-
+   /* const readStream=getFileStream(item.photoUrl);
     var writeStream2 = fs.createWriteStream(`photo${item.taskDate}-${new Date().getMilliseconds()}.jpeg`);
     readStream.pipe(writeStream2);
     var pathDir;
@@ -792,30 +792,45 @@ function generateTable(doc, gelenVeri) {
     var appDir = path.dirname(require.main.filename);
     console.log("appDir=" +appDir + `/photo${item.taskDate}-${new Date().getMilliseconds()}.jpeg`);
     pathDir=appDir + `/photo${item.taskDate}-${new Date().getMilliseconds()}.jpeg`
-    
-   
+   */
    
     generateTableRow(
-      doc,
-      position,
-      item.adress,
-      item.passedTime,
-      item.desc,
-     
-      );
+    doc,
+    position,
+    item.adress,
+    item.passedTime,
+    item.desc,
+    item.photoUrl
+    );
     generateHr(doc, position+ 50);
-  }
 }
+}
+
 function generateHr(doc, y) {
-  doc
+doc
     .strokeColor("#aaaaaa")
     .lineWidth(1)
     .moveTo(50, y)
     .lineTo(550, y)
     .stroke();
 }
-function generateTableRow(doc, y, c1, c2, c3) {
-  
+
+function generateTableRow(doc, y, c1, c2, c3,c4) {
+console.log("C4="+ c4);
+
+async function fetchImage(src) {
+    const image = await axios
+        .get(src, {
+            responseType: 'arraybuffer'
+        })
+    return image.data;
+}
+
+const imageUrl = fetchImage(c4);
+
+
+
+
   doc
   .fontSize(10)
   .font('Times-Bold')
@@ -830,14 +845,11 @@ function generateTableRow(doc, y, c1, c2, c3) {
   .text("Description:", 50, (y))
   .font('Times-Roman')
   .text(c3,120, (y),{ width: 280})
-  
+  .image(imageUrl, 450, (y-60), {align: "right", width: 80,height:100 })
   .moveDown()
 }
 
-
-}
- 
-  function sendMail(length,today){
+function sendMail(length,today){
     console.log(length+"/"+today)
     var attach=[];
 
@@ -852,24 +864,24 @@ function generateTableRow(doc, y, c1, c2, c3) {
       })
     }
     console.log(attach);
+    
     var mailOptions = {
       from: 'softlinnsolutions@gmail.com',
       to: 'esali.softlinn@gmail.com',
       subject: "Reports( " +today+" )",
       html: '<b>Hello world attachment test HTML</b>',
       attachments: attach,
-     }
-    mail.sendMail(mailOptions, function(error, info){
+    }
+    mail.sendMail(mailOptions, function(error, info){ 
       if (error) {
         console.log(error);
       } else {
         console.log('Email sent: ' + info.response);
       }
-  });
-  }
- 
-});
+    });
+}
 
+})
 
 app.post("/updateemail/:id", function (req, res) {
  Kullanici.updateOne(

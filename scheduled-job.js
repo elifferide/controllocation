@@ -4,9 +4,12 @@ const PDFDocument = require('pdfkit');
 const fs = require('fs')
 const path=require("path");
 
+const Kullanici = require("./models/kullaniciModel");
+
 const S3=require("aws-sdk/clients/s3");
 const aws= require('aws-sdk');
 const multerS3 = require('multer-s3');
+
 
 const s3 = new aws.S3({
     region: process.env.AWS_BUCKET_REGION,
