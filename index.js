@@ -836,7 +836,7 @@ console.log("C4="+ c4);
   .text("Description:", 50, (y))
   .font('Times-Roman')
   .text(c3,120, (y),{ width: 280})
-  
+
   axios.get({
     url: c4,
     // Prevents Request from converting response to string
@@ -844,9 +844,10 @@ console.log("C4="+ c4);
 
   }, function (err, response, body) {
     doc.image(body,450, (y-60), {align: "right", width: 80,height:100 })
+    .moveDown()
   })
   //.image(imageUrl, 450, (y-60), {align: "right", width: 80,height:100 })
-  .moveDown()
+  //.moveDown()
 }
 
 function sendMail(length,today){
