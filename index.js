@@ -818,15 +818,19 @@ doc
 function generateTableRow(doc, y, c1, c2, c3,c4) {
 console.log("C4="+ c4);
 
-async function getImage(url){
-  axios.get(url, {responseType: 'arraybuffer'}).then(response => {
-    const pngBuffer = Buffer.from(response.data);
-    return pngBuffer;
-  })
-}
-const imagePath=getImage(c4)
-console.log(imagePath);
 
+    let response = await _AXIOS.request(
+    {
+        method: "GET",
+        url: c4,
+        responseEncoding: "binary"
+    });
+    let responseData = response.data;
+    let imgBinary = Buffer.from(responseData, "binary");
+//  [COMMENT] The image is encoded in base64 string.
+    let imgBase64 = imgBinary.toString("base64");
+    let img = Buffer.from(imgBase64, "base64");
+    console.log(img);
 doc
 .fontSize(10)
 .font('Times-Bold')
@@ -841,7 +845,7 @@ doc
 .text("Description:", 50, (y))
 .font('Times-Roman')
 .text(c3,120, (y),{ width: 280})
-//.image(imagePath, 450, (y-60), {align: "right", width: 80,height:100 })
+//.image(img, 450, (y-60), {align: "right", width: 80,height:100 })
 .moveDown()
 }
 
