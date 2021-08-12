@@ -823,7 +823,7 @@ async function fetchImage(src) {
         .get(src, {
             responseType: 'arraybuffer'
         })
-        console.log(image.data);
+    console.log(image.data);
     return image.data;
 }
 
@@ -846,7 +846,7 @@ const imageUrl = fetchImage(c4);
   .text("Description:", 50, (y))
   .font('Times-Roman')
   .text(c3,120, (y),{ width: 280})
-  .image(imageUrl, 450, (y-60), {align: "right", width: 80,height:100 })
+
   .moveDown()
 }
 
