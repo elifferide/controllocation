@@ -819,15 +819,22 @@ function generateTableRow(doc, y, c1, c2, c3,c4) {
 console.log("C4="+ c4);
 
 
-axios({
-  method: 'get',
-  url: c4,
-  responseType: 'stream'
-})
-  .then(function (response) {
-    response.data.pipe(fs.createWriteStream('image.jpeg'))
-});
-
+async function displayImage(url)
+{
+        let response = await axios.request(
+    {
+        method: "GET",
+        url: url,
+        responseEncoding: "binary"
+    });
+    let responseData = response.data;
+    let imgBinary = Buffer.from(responseData, "binary");
+//  [COMMENT] The image is encoded in base64 string.
+    let imgBase64 = imgBinary.toString("base64");
+    let img = Buffer.from(imgBase64, "base64");
+  return img;
+}
+const img=displayImage(c4);
 
 doc
 .fontSize(10)
@@ -843,7 +850,7 @@ doc
 .text("Description:", 50, (y))
 .font('Times-Roman')
 .text(c3,120, (y),{ width: 280})
-.image(__dirname+'/puclic/resimler/photo-photo.jpg194.jpg', 450, (y-60), {align: "right", width: 80,height:100 })
+.image(img, 450, (y-60), {align: "right", width: 80,height:100 })
 .moveDown()
 }
 
