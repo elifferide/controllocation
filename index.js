@@ -823,6 +823,7 @@ async function fetchImage(src) {
         .get(src, {
             responseType: 'arraybuffer'
         })
+        console.log(image.data);
     return image.data;
 }
 
