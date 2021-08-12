@@ -819,16 +819,18 @@ function generateTableRow(doc, y, c1, c2, c3,c4) {
 console.log("C4="+ c4);
 
 
-async function fetchImage(src) {
-  const image = await axios
-      .get(src, {
-          responseType: 'stream'
-      })
-      console.log(image.data.pathname);
-  return image.data.pathname;
-}
+var download = function(uri, filename, callback){
+  request.head(uri, function(err, res, body){
+    console.log('content-type:', res.headers['content-type']);
+    console.log('content-length:', res.headers['content-length']);
 
-const imageUrl = fetchImage(c4);
+    request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
+  });
+};
+
+download(c4, `image.jpeg`, function(){
+  console.log('done');
+});
 
 
 doc
@@ -845,7 +847,7 @@ doc
 .text("Description:", 50, (y))
 .font('Times-Roman')
 .text(c3,120, (y),{ width: 280})
-.image('https://control-location.s3.amazonaws.com/images/placesimage258.jpeg', 450, (y-60), {align: "right", width: 80,height:100 })
+.image(`image.jpeg`, 450, (y-60), {align: "right", width: 80,height:100 })
 .moveDown()
 }
 
