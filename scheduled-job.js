@@ -204,7 +204,7 @@ function generateTableRow(doc, y, c1, c2, c3,c4) {
         return image.data;
     }
     
-    const imageUrl = await fetchImage(c4);
+    const imageUrl = fetchImage(c4);
     
 
 
