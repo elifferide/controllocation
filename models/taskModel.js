@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 
-const Schema = mongoose.Schema;
+
+
 const taskshema = {
     user_id:String,
     adress: String,
