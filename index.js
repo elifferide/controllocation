@@ -818,13 +818,6 @@ doc
 function generateTableRow(doc, y, c1, c2, c3,c4) {
 console.log("C4="+ c4);
 
-res = await fetch(c4,{encoding: null });
-imageBuffer = await res.buffer();
-img = new Buffer(imageBuffer, 'base64');
-console.log(img);
-    
-
-
 
 
 
@@ -843,7 +836,15 @@ console.log(img);
   .text("Description:", 50, (y))
   .font('Times-Roman')
   .text(c3,120, (y),{ width: 280})
-  .image(img, 450, (y-60), {align: "right", width: 80,height:100 })
+  request({
+    url: c4,
+    // Prevents Request from converting response to string
+    encoding: null
+
+  }, function (err, response, body) {
+    doc.image(body,450, (y-60), {align: "right", width: 80,height:100 })
+  })
+  //.image(imageUrl, 450, (y-60), {align: "right", width: 80,height:100 })
   .moveDown()
 }
 
