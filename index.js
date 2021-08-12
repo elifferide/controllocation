@@ -8,7 +8,7 @@ const passport = require("passport");
 const passportLocalMongoose = require("passport-local-mongoose");
 const session = require("express-session");
 const axios = require('axios');
-
+const fetch=require("node-fetch");
 const { Passport } = require("passport");
 const PDFDocument = require('pdfkit');
 const fs = require('fs')
@@ -818,14 +818,13 @@ doc
 function generateTableRow(doc, y, c1, c2, c3,c4) {
 console.log("C4="+ c4);
 
-async function fetchImage(src) {
-    const image = await axios
-        .get(src, {
-            responseType: 'stream'
-        })
-    console.log(image);
-    return image.data;
-}
+const fetchImage = async (src) => {
+  const response = await fetch(src);
+  const image = await response.buffer();
+  console.log(image);
+  return image;
+};
+    
 
 const imageUrl = fetchImage(c4);
 
@@ -846,7 +845,7 @@ const imageUrl = fetchImage(c4);
   .text("Description:", 50, (y))
   .font('Times-Roman')
   .text(c3,120, (y),{ width: 280})
-
+  .image(imageUrl, 450, (y-60), {align: "right", width: 80,height:100 })
   .moveDown()
 }
 
