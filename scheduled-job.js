@@ -3,6 +3,7 @@ const axios = require('axios');
 const PDFDocument = require('pdfkit');
 const fs = require('fs')
 const path=require("path");
+const mongoose = require("mongoose");
 
 const Kullanici = require("./models/kullaniciModel");
 const Task=require("./models/taskModel");
@@ -11,6 +12,13 @@ const S3=require("aws-sdk/clients/s3");
 const aws= require('aws-sdk');
 const multerS3 = require('multer-s3');
 
+mongoose
+  .connect(process.env.BAGLANTI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => console.log("Database connected!"))
+  .catch((err) => console.log(err));
 
 const s3 = new aws.S3({
     region: process.env.AWS_BUCKET_REGION,
