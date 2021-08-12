@@ -821,9 +821,9 @@ console.log("C4="+ c4);
 async function fetchImage(src) {
     const image = await axios
         .get(src, {
-            responseType: 'arraybuffer'
+            responseType: 'stream'
         })
-    console.log(image.data);
+    console.log(image);
     return image.data;
 }
 
