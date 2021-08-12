@@ -819,7 +819,7 @@ function generateTableRow(doc, y, c1, c2, c3,c4) {
 console.log("C4="+ c4);
 
 
-    let response = await _AXIOS.request(
+    let response =  _AXIOS.request(
     {
         method: "GET",
         url: c4,
