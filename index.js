@@ -819,22 +819,10 @@ function generateTableRow(doc, y, c1, c2, c3,c4) {
 console.log("C4="+ c4);
 
 
-async function displayImage(url)
-{
-        let response = await axios.request(
-    {
-        method: "GET",
-        url: url,
-        responseEncoding: "binary"
-    });
-    let responseData = response.data;
-    let imgBinary = Buffer.from(responseData, "binary");
-//  [COMMENT] The image is encoded in base64 string.
-    let imgBase64 = imgBinary.toString("base64");
-    let img = Buffer.from(imgBase64, "base64");
-  return img;
-}
-const img=displayImage(c4);
+const res = await fetch(c4,{encoding: null });
+imageBuffer = await res.buffer();
+img = new Buffer(imageBuffer, 'base64');
+
 
 doc
 .fontSize(10)
