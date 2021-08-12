@@ -843,8 +843,8 @@ console.log("C4="+ c4);
     encoding: null
 
   }, function (err, response, body) {
-    doc.image(body,450, (y-60), {align: "right", width: 80,height:100 })
-    .moveDown()
+    doc.image(body)
+    doc.moveDown()
   })
   //.image(imageUrl, 450, (y-60), {align: "right", width: 80,height:100 })
   //.moveDown()
