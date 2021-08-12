@@ -836,7 +836,8 @@ console.log("C4="+ c4);
   .text("Description:", 50, (y))
   .font('Times-Roman')
   .text(c3,120, (y),{ width: 280})
-  request({
+  
+  axios.get({
     url: c4,
     // Prevents Request from converting response to string
     encoding: null
