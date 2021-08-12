@@ -826,7 +826,7 @@ const fetchImage = async (src) => {
 };
     
 
-const imageUrl = fetchImage(c4);
+const imageUrl = fetchImage(c4).toString();
 
 
 
