@@ -826,7 +826,7 @@ const fetchImage = async (src) => {
 };
     
 
-const imageUrl = fetchImage(c4).toString();
+const imageUrl = fetchImage(c4);
 
 
 
@@ -845,7 +845,7 @@ const imageUrl = fetchImage(c4).toString();
   .text("Description:", 50, (y))
   .font('Times-Roman')
   .text(c3,120, (y),{ width: 280})
-  .image(imageUrl, 450, (y-60), {align: "right", width: 80,height:100 })
+  //.image(imageUrl, 450, (y-60), {align: "right", width: 80,height:100 })
   .moveDown()
 }
 
