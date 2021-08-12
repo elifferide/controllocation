@@ -1,12 +1,7 @@
 const mongoose = require("mongoose");
 const passport = require("passport");
 const passportLocalMongoose = require("passport-local-mongoose");
-const userSchema = new mongoose.Schema({
-  photoUrl: String,
-});
 
-const User = mongoose.model("User", userSchema);
-module.exports = User;
 
 const kullaniciSema = new mongoose.Schema({
   isim: String,

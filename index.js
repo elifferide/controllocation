@@ -18,6 +18,7 @@ const aws= require('aws-sdk');
 const multerS3 = require('multer-s3');
 
 const Kullanici = require("./models/kullaniciModel");
+const Task=require("./models/taskModel");
 
 const s3 = new aws.S3({
   region: process.env.AWS_BUCKET_REGION,
@@ -69,7 +70,6 @@ var upload2 = multer({ storage: storage2 });
     );
   },
 });
-
 
 var storage2 = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -125,7 +125,7 @@ app.use(passport.session());
 app.get("/", function (req, res) {
   res.send("Başarılı..");
 });
-
+/*
 //Task Schema
 const taskshema = {
   user_id:String,
@@ -139,7 +139,7 @@ const taskshema = {
 
 };
 const Task = mongoose.model("Task", taskshema);
-/*
+
 //User Schema
 const kullaniciSema = new mongoose.Schema({
   isim: String,
@@ -784,16 +784,7 @@ for (let i = 0; i < gelenVeri.length; i++) {
 
     const item = gelenVeri[i];
     const position = invoiceTableTop + (j+1) *120;
-   /* const readStream=getFileStream(item.photoUrl);
-    var writeStream2 = fs.createWriteStream(`photo${item.taskDate}-${new Date().getMilliseconds()}.jpeg`);
-    readStream.pipe(writeStream2);
-    var pathDir;
-    
-    var appDir = path.dirname(require.main.filename);
-    console.log("appDir=" +appDir + `/photo${item.taskDate}-${new Date().getMilliseconds()}.jpeg`);
-    pathDir=appDir + `/photo${item.taskDate}-${new Date().getMilliseconds()}.jpeg`
-   */
-   
+      
     generateTableRow(
     doc,
     position,
