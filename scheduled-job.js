@@ -28,7 +28,6 @@ const s3 = new aws.S3({
 
 var nodemailer = require('nodemailer');
 var mail = nodemailer.createTransport({
-  host: 'smtp.gmail.com',
   service: 'gmail',
   secure: true,
   auth: {
