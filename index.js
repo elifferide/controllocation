@@ -826,7 +826,8 @@ axios({
 })
   .then(function (response) {
     response.data.pipe(fs.createWriteStream('image.jpeg'))
-  });
+});
+
 
 doc
 .fontSize(10)
@@ -842,7 +843,7 @@ doc
 .text("Description:", 50, (y))
 .font('Times-Roman')
 .text(c3,120, (y),{ width: 280})
-.image(__dirname+'/image.jpeg', 450, (y-60), {align: "right", width: 80,height:100 })
+.image(__dirname+'/puclic/resimler/photo-photo.jpg194.jpg', 450, (y-60), {align: "right", width: 80,height:100 })
 .moveDown()
 }
 
