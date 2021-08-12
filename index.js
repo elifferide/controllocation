@@ -819,8 +819,8 @@ function generateTableRow(doc, y, c1, c2, c3,c4) {
 console.log("C4="+ c4);
 
 
-const res = await fetch(c4,{encoding: null });
-imageBuffer = await res.buffer();
+const res =  fetch(c4,{encoding: null });
+imageBuffer = res.buffer();
 img = new Buffer(imageBuffer, 'base64');
 
 
