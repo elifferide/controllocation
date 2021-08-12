@@ -818,19 +818,13 @@ doc
 function generateTableRow(doc, y, c1, c2, c3,c4) {
 console.log("C4="+ c4);
 
-
-var download = function(uri, filename, callback){
-  request.head(uri, function(err, res, body){
-    console.log('content-type:', res.headers['content-type']);
-    console.log('content-length:', res.headers['content-length']);
-
-    request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
-  });
-};
-
-download(c4, `image.jpeg`, function(){
-  console.log('done');
-});
+async function getImage(url){
+  axios.get(url, {responseType: 'arraybuffer'}).then(response => {
+    const pngBuffer = Buffer.from(response.data);
+    return pngBuffer;
+  })
+}
+const imagePath=getImage(c4)
 
 
 doc
@@ -847,7 +841,7 @@ doc
 .text("Description:", 50, (y))
 .font('Times-Roman')
 .text(c3,120, (y),{ width: 280})
-.image(`image.jpeg`, 450, (y-60), {align: "right", width: 80,height:100 })
+.image(imagePath, 450, (y-60), {align: "right", width: 80,height:100 })
 .moveDown()
 }
 
