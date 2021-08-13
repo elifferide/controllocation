@@ -120,12 +120,14 @@ exports.userPhoto= (req, res, next) => {
         var userresimlinki = "";
    
         console.log("URL=" +req.file.location);
-          if(req.file){
-            userresimlinki = req.file.location;
-            console.log(userresimlinki);
-          }
-      
-          Kullanici.updateOne(
+        if(err){
+            console.log(err)
+        }else{
+
+        }
+        userresimlinki = req.file.location;
+        console.log(userresimlinki);
+        Kullanici.updateOne(
             { _id: req.params.id },
             {        
                 photo_url:userresimlinki,
@@ -138,7 +140,7 @@ exports.userPhoto= (req, res, next) => {
                 console.log("Saved url")
               }
             }
-          );
+        );
     })
     
   }
