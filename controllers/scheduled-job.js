@@ -40,7 +40,7 @@ var mail = nodemailer.createTransport({
   }
 });
 
-exports.createPdfAndSendEmail=function (req, res) {
+function createPdfAndSendEmail() {
     Kullanici.find({},function(err,users){
         if(err){
           console.log(err);
@@ -257,6 +257,8 @@ function sendMail(length,today){
           }
         });
 }
-     
-  
+
+createPdfAndSendEmail();
+
+module.exports=createPdfAndSendEmail;  
 

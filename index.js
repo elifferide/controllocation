@@ -11,7 +11,7 @@ const session = require("express-session");
 
 const userController=require("./controllers/userController");
 const taskController=require("./controllers/taskController");
-const scheduledJob=require("./controllers/scheduled-job")
+const createPdfAndSendEmail=require("./controllers/scheduled-job")
 
 
 app.use(
@@ -71,7 +71,9 @@ app.post("/updatedesc/:id",taskController.updateDesc);
 app.post('/uploadphoto/:id',taskController.updatePhoto);
 
 
-app.post('/createPdfReport',scheduledJob.createPdfAndSendEmail)
+app.post('/createPdfReport',(req,res)=>{
+  createPdfAndSendEmail();
+})
 
 
 let cron = require('node-cron');
