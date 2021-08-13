@@ -3,6 +3,8 @@ const app = express();
 
 const { Passport } = require("passport");
 const passport = require("passport");
+const session = require("express-session");
+
 const Kullanici = require("../models/kullaniciModel");
 
 passport.use(Kullanici.createStrategy()); // Kullanıcı Şeması ile passport arasında bağlantı kurduk.
