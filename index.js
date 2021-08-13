@@ -11,7 +11,7 @@ const session = require("express-session");
 
 const userController=require("./controllers/userController");
 const taskController=require("./controllers/taskController");
-//const createPdfAndSendEmail=require("./scheduled-job");
+const createPdfAndSendEmail=require("./scheduled-job");
 
 app.use(
   cors({
@@ -73,10 +73,7 @@ app.post('/uploadphoto/:id',taskController.updatePhoto);
 
 
 let cron = require('node-cron');
-cron.schedule('45 18 * * *', () => {
-  console.log("cron çalıştı");
-  createPdfAndSendEmail();
-});
+cron.schedule('55 18 * * *',   createPdfAndSendEmail);
 
 
 const port=process.env.PORT || 5000;
