@@ -1,21 +1,43 @@
+require("dotenv").config();
 const express = require("express");
-const app = express();
+
 
 const { Passport } = require("passport");
 const passport = require("passport");
-const session = require("express-session");
+
+
+const multer = require('multer');
+const multerS3 = require('multer-s3');
+const aws= require('aws-sdk');
+const S3=require("aws-sdk/clients/s3");
+const s3 = new aws.S3({
+    region: process.env.AWS_BUCKET_REGION,
+    accessKeyId:process.env.S3_ACCESS_KEY,
+    secretAccessKey:process.env.S3_SECRET_ACCESS_KEY
+});
+const storage2 = multerS3({
+    s3: s3,
+    bucket: 'control-location/images',
+    metadata: function(req, file, cb) {
+      cb(null, {fieldName:file.fieldname} );
+  },
+    key: function(req, file, cb) {
+        console.log(file);
+        cb(null,  "user" +
+          new Date().getMilliseconds() +".jpeg");
+    }
+  })
+var upload2 = multer({ storage: storage2 });
 
 const Kullanici = require("../models/kullaniciModel");
 
+passport.use(Kullanici.createStrategy()); // Kullanıcı Şeması ile passport arasında bağlantı kurduk.
 
-
-  passport.use(Kullanici.createStrategy()); // Kullanıcı Şeması ile passport arasında bağlantı kurduk.
-
-  passport.serializeUser(function (user, done) {
+passport.serializeUser(function (user, done) {
     done(null, user.id);
   });
   
-  passport.deserializeUser(function (id, done) {
+passport.deserializeUser(function (id, done) {
     Kullanici.findById(id, function (err, user) {
       done(err, user);
     });
@@ -55,9 +77,9 @@ exports.createUser= function (req, res) {
         }
       }
     );
-  }
+}
 
-  exports.userLogin = function (req, res) {
+exports.userLogin = function (req, res) {
     const kullanici = new Kullanici({
       username: req.body.username,
       sifre: req.body.password,
@@ -83,9 +105,31 @@ exports.createUser= function (req, res) {
   
       } 
     });
-  }
+}
 
 exports.userLogout= function (req, res) {
     req.logout();
     res.send({ sonuc: "başarılı" });
+}
+
+exports.userPhoto= upload2.single('photo'), (req, res, next) => {
+    var userresimlinki = "";
+  
+  
+    if(req.file){
+      userresimlinki = req.file.location;
+    }
+    Kullanici.updateOne(
+      { _id: req.params.id },
+      {        
+          photo_url:userresimlinki,
+      },
+      function (err) {
+        if (err) {
+          res.send({ sonuc: false });
+        } else {
+          res.send({ sonuc: true });
+        }
+      }
+    );
   }

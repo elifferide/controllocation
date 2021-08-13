@@ -44,19 +44,7 @@ const storage = multerS3({
 })
 var upload = multer({ storage: storage });
 
-const storage2 = multerS3({
-  s3: s3,
-  bucket: 'control-location/images',
-  metadata: function(req, file, cb) {
-    cb(null, {fieldName:file.fieldname} );
-},
-  key: function(req, file, cb) {
-      console.log(file);
-      cb(null,  "user" +
-        new Date().getMilliseconds() +".jpeg");
-  }
-})
-var upload2 = multer({ storage: storage2 });
+
 
 
 
@@ -264,27 +252,7 @@ app.post('/uploadphoto/:id', upload.single('photo'), (req, res, next) => {
 })
 
 
-app.post('/uploadUserPhoto/:id', upload2.single('photo'), (req, res, next) => {
-  var userresimlinki = "";
-
-
-  if(req.file){
-    userresimlinki = req.file.location;
-  }
-  Kullanici.updateOne(
-    { _id: req.params.id },
-    {        
-        photo_url:userresimlinki,
-    },
-    function (err) {
-      if (err) {
-        res.send({ sonuc: false });
-      } else {
-        res.send({ sonuc: true });
-      }
-    }
-  );
-})
+app.post('/uploadUserPhoto/:id',userController.userPhoto);
 
 
 
