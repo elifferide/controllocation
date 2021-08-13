@@ -1,12 +1,13 @@
 require("dotenv").config();
+
 const axios = require('axios');
 const PDFDocument = require('pdfkit');
 const fs = require('fs')
 const path=require("path");
 const mongoose = require("mongoose");
 
-const Kullanici = require("./models/kullaniciModel");
-const Task=require("./models/taskModel");
+const Kullanici = require("../models/kullaniciModel");
+const Task=require("../models/taskModel");
 
 const S3=require("aws-sdk/clients/s3");
 const aws= require('aws-sdk');
@@ -39,7 +40,7 @@ var mail = nodemailer.createTransport({
   }
 });
 
-function createPdfAndSendEmail(){
+exports.createPdfAndSendEmail= function createPdfAndSendEmail(){
     Kullanici.find({},function(err,users){
         if(err){
           console.log(err);
