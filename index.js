@@ -11,7 +11,7 @@ const session = require("express-session");
 
 const userController=require("./controllers/userController");
 const taskController=require("./controllers/taskController");
-const createPdfAndSendEmail=require("./scheduled-job");
+//const createPdfAndSendEmail=require("./scheduled-job");
 
 app.use(
   cors({
