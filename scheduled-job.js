@@ -6,8 +6,8 @@ const fs = require('fs')
 const path=require("path");
 const mongoose = require("mongoose");
 
-const Kullanici = require("../models/kullaniciModel");
-const Task=require("../models/taskModel");
+const Kullanici = require("./models/kullaniciModel");
+const Task=require("./models/taskModel");
 
 const S3=require("aws-sdk/clients/s3");
 const aws= require('aws-sdk');
