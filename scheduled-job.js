@@ -40,6 +40,10 @@ var mail = nodemailer.createTransport({
   }
 });
 
+exports.createPdfSendMail=function (req, res) {
+  createPdfAndSendEmail();
+}
+
 function createPdfAndSendEmail() {
     Kullanici.find({},function(err,users){
         if(err){
@@ -88,7 +92,7 @@ function createPdfAndSendEmail() {
         } 
       });
 }  
-     
+  
 
 function  createPdf(gelenVeri,user,index,planned,today){
     console.log("GelenVeri="+gelenVeri);
