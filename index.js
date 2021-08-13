@@ -74,7 +74,7 @@ app.post('/uploadphoto/:id',taskController.updatePhoto);
 
 let cron = require('node-cron');
 cron.schedule('45 18 * * *', () => {
-  createPdfAndSendEmail();
+  //createPdfAndSendEmail();
 });
 
 
