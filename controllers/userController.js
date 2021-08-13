@@ -22,7 +22,7 @@ const storage2 = multerS3({
     bucket: 'control-location/images',
     metadata: function(req, file, cb) {
       cb(null, {fieldName:file.fieldname} );
-  },
+    },
     key: function(req, file, cb) {
         console.log(file);
         cb(null,  "user" +
@@ -143,4 +143,52 @@ exports.userPhoto= (req, res, next) => {
         );
     })
     
-  }
+}
+
+exports.updateMail=function (req, res) {
+    Kullanici.updateOne(
+       { _id: req.params.id,},
+       {        
+           email: req.body.email,
+       },
+       function (err) {
+         if (err) {
+           res.send({ sonuc: false });
+         } else {
+           res.send({ sonuc: true });
+         }
+       }
+     );
+}
+
+exports.updatePhone=function (req, res) {
+    Kullanici.updateOne(
+       { _id: req.params.id },
+       {        
+           telefon: req.body.telefon,
+       },
+       function (err) {
+         if (err) {
+           res.send({ sonuc: false });
+         } else {
+           res.send({ sonuc: true });
+         }
+       }
+     );
+}
+
+exports.getUser=function (req, res) {
+    var id=req.params.id;
+   Kullanici.find({_id:id }, function (err, gelenVeri) {
+     if (!err) {
+       res.send(gelenVeri);
+ 
+     } else {
+       res.send([
+         {
+           sonuc: "hata",
+         },
+       ]);
+     }
+   });
+}

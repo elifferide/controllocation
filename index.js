@@ -100,10 +100,13 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.post("/api/kullanici/olusturma",userController.createUser);
-
 app.post("/login",userController.userLogin );
-
 app.get("/logout",userController.userLogout);
+app.post('/uploadUserPhoto/:id',userController.userPhoto);
+app.post("/updateemail/:id", userController.updateMail);
+app.post("/updatetel/:id",userController.updatePhone);
+app.post("/getuser/:id",userController.getUser);
+
 
 
 
@@ -252,7 +255,7 @@ app.post('/uploadphoto/:id', upload.single('photo'), (req, res, next) => {
 })
 
 
-app.post('/uploadUserPhoto/:id',userController.userPhoto);
+
 
 
 
@@ -484,53 +487,10 @@ function sendMail(length,today){
 
 })
 
-app.post("/updateemail/:id", function (req, res) {
- Kullanici.updateOne(
-    { _id: req.params.id,},
-    {        
-        email: req.body.email,
-    },
-    function (err) {
-      if (err) {
-        res.send({ sonuc: false });
-      } else {
-        res.send({ sonuc: true });
-      }
-    }
-  );
-});
 
-app.post("/updatetel/:id", function (req, res) {
-  Kullanici.updateOne(
-     { _id: req.params.id },
-     {        
-         telefon: req.body.telefon,
-     },
-     function (err) {
-       if (err) {
-         res.send({ sonuc: false });
-       } else {
-         res.send({ sonuc: true });
-       }
-     }
-   );
- });
 
- app.post("/getuser/:id", function (req, res) {
-   var id=req.params.id;
-  Kullanici.find({_id:id }, function (err, gelenVeri) {
-    if (!err) {
-      res.send(gelenVeri);
 
-    } else {
-      res.send([
-        {
-          sonuc: "hata",
-        },
-      ]);
-    }
-  });
-});
+
 
 let cron = require('node-cron');
 cron.schedule('45 13 * * *', () => {
