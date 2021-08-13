@@ -1,3 +1,5 @@
+const app = express();
+
 const { Passport } = require("passport");
 const passport = require("passport");
 const Kullanici = require("../models/kullaniciModel");
