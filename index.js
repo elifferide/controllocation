@@ -85,7 +85,7 @@ mongoose
 app.get("/", function (req, res) {
   res.send("Başarılı..");
 });
-
+/*
 passport.use(Kullanici.createStrategy()); // Kullanıcı Şeması ile passport arasında bağlantı kurduk.
 
 passport.serializeUser(function (user, done) {
@@ -97,7 +97,19 @@ passport.deserializeUser(function (id, done) {
     done(err, user);
   });
 });
+*/
+app.use(
+  session({
+    secret: "Softlinn-ProjectApp",
+    resave: true,
+    saveUninitialized: true,
+    name: "kullanici_bilgileri",
+    proxy: true,
+  })
+);
 
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.post("/api/kullanici/olusturma",userController.createUser);
 
