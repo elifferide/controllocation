@@ -55,39 +55,7 @@ const storage2 = multerS3({
 })
 var upload2 = multer({ storage: storage2 });
 
-/*var storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, __dirname + "/public/resimler");
-  },
-  filename: function (req, file, cb) {
-    cb(
-      null,
-      file.fieldname +
-        "-" +
-        file.originalname +
-        new Date().getMilliseconds() +
-        ".jpg"
-    );
-  },
-});
 
-var storage2 = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, __dirname + "/public/resimler/user");
-  },
-  filename: function (req, file, cb) {
-    cb(
-      null,
-      file.fieldname +
-        "-" +
-        file.originalname +
-        new Date().getMilliseconds() +
-        ".jpg"
-    );
-  },
-});
-var upload2 = multer({ storage: storage2 });
-*/
 
 app.use(
   cors({
@@ -125,40 +93,7 @@ app.use(passport.session());
 app.get("/", function (req, res) {
   res.send("Başarılı..");
 });
-/*
-//Task Schema
-const taskshema = {
-  user_id:String,
-  adress: String,
-  lat: Number,
-  long: Number,
-  passedTime:String,
-  desc:String,
-  taskDate:String,
-  photoUrl:String,
 
-};
-const Task = mongoose.model("Task", taskshema);
-
-//User Schema
-const kullaniciSema = new mongoose.Schema({
-  isim: String,
-  soyisim: String,
-  email: String,
-  username: String,
-  sifre: String,
-  telefon: String,
-  approval:Boolean,
-  photo_url:String,
-});
-
-kullaniciSema.plugin(passportLocalMongoose, {
-  usernameField: "username",
-  passwordField: "sifre",
-});
-
-const Kullanici = mongoose.model("Kullanici", kullaniciSema);
-*/
 passport.use(Kullanici.createStrategy()); // Kullanıcı Şeması ile passport arasında bağlantı kurduk.
 
 passport.serializeUser(function (user, done) {
@@ -408,6 +343,8 @@ app.post('/uploadUserPhoto/:id', upload2.single('photo'), (req, res, next) => {
   );
 })
 
+
+
 //Create Pdf Report
 var nodemailer = require('nodemailer');
 var mail = nodemailer.createTransport({
@@ -422,231 +359,6 @@ var mail = nodemailer.createTransport({
     rejectUnauthorized:false,
   }
 });
-let cron = require('node-cron');
-cron.schedule('50 21 * * *', () => {
-  console.log("cron çalıştı");
-});
-/*
-cron.schedule('2 21 * * *', () => {
-  console.log("cron çalıştı");
-  Kullanici.find({},function(err,users){
-    if(err){
-            console.log(err);
-    }else{
-      var date = new Date().getDate();
-      var month = new Date().getMonth() + 1;
-      var year = new Date().getFullYear();
-      var today= date + "-" + month + "-" + year;
-     
-      for(let i=0; i<users.length; i++){
-        var id=users[i]._id;
-        var planned;
-
-         Task.find({user_id:id,taskDate:today},function (err, gelen) {
-          if (!err) {
-            if (gelen){
-             planned=gelen.length;    
-          } 
-        } else {
-              res.send([
-                {
-                  sonuc: "length hata",
-                },
-              ]);
-            }
-        }) ;  
-
-        Task.find({user_id:id,taskDate:today,desc:{$ne:""},passedTime:{$ne:""},photoUrl:{$ne:""}}, function (err, gelenVeri) {
-            if (!err) {      
-              createPdf(gelenVeri,users[i],i,planned,today);
-            } else {
-                res.send([
-                  {
-                    sonuc: "hata",
-                  },
-                ]);
-              }
-          })
-           
-      }
-      sendMail(users.length,today);
-      }
-    
-  });
-
-
- function  createPdf(gelenVeri,user,index,planned,today){
-
- const doc = new PDFDocument();
- if(gelenVeri.length===0){
-   console.log("pdf yok");
-   let writeStream = fs.createWriteStream(`output${index}.pdf`);
-   doc.pipe(writeStream);
-    doc
-    .fontSize(35)
-    .text(`${user.isim} ${user.soyisim}'s Report (${today})`,{align: "center"})
-    .fontSize(25)
-    .text(`Planned: ${planned}  Visited: 0`,{align: "center"})
-   
-  
-    // Finalize PDF file
-    doc.end();    
-  } else {
-//    doc.pipe(fs.createWriteStream(`output${index}.pdf`));
-    doc
-    .fontSize(35)
-    .text(`${user.isim} ${user.soyisim}'s Report (${today})`,{align: "center"})
-    .fontSize(25)
-    .text(`Planned: ${planned}  Visited: ${gelenVeri.length}`,{align: "center"})
-   
-    generateTable(doc, gelenVeri);
-    // Finalize PDF file
-    doc.end();    
-    
-console.log("pdf"+index+ " oluştu")  ;
-
-writeStream.on('finish', function () {
-  var appDir = path.dirname(require.main.filename);
-  const fileContent = fs.readFileSync(appDir + '/output.pdf');
-  var params = {
-      Key : 'fileName',
-      Body : fileContent,
-      Bucket : 'createlocation/report',
-      ContentType : 'application/pdf',
-      ACL: "public-read",
-    } ;
-
-    s3.upload(params, function(err, response) {
-        console.log("pdf"+index+"gönderildi.");
-    });
-  })
-
- 
-
-}
-
-}
-
-
-
-function generateTable(doc, gelenVeri) {
-  let invoiceTableTop = 150;
-  generateHr(doc,invoiceTableTop+ 40);
-
-  for (let i = 0; i < gelenVeri.length; i++) {
-   let j=i;
-    if(i%4===0 && i!==0){
-      j=0;
-      doc
-      .addPage(); 
-    } if(i%4===1){j=1} if(i%4===2){j=2} if(i%4===3){j=3}  
-    if(i===0){j=i}
-    const item = gelenVeri[i];
-    const position = invoiceTableTop + (j+1) *120;
-
-    generateTableRow(
-      doc,
-      position,
-      item.adress,
-      item.passedTime,
-      item.desc,
-      __dirname+item.photoUrl
-    );
-    generateHr(doc, position+ 50);
-  }
-}
-function generateHr(doc, y) {
-  doc
-    .strokeColor("#aaaaaa")
-    .lineWidth(1)
-    .moveTo(50, y)
-    .lineTo(550, y)
-    .stroke();
-}
-function generateTableRow(doc, y, c1, c2, c3,c4) {
-  doc
-    .fontSize(10)
-    .font('Times-Bold')
-    .text("Adress:",50,(y-45))
-    .font('Times-Roman')
-    .text(c1,120,(y-45),{ width: 280})
-    .font('Times-Bold')
-    .text("Passed Time:", 50, (y-20))
-    .font('Times-Roman')
-    .text(c2, 120, (y-20),{ width: 280})
-    .font('Times-Bold')
-    .text("Description:", 50, (y))
-    .font('Times-Roman')
-    .text(c3,120, (y),{ width: 280})
-    .image(c4, 450, (y-60), {align: "right", width: 80,height:100 })
-    .moveDown()
-}
-
-
-
- 
-  function sendMail(length,today){
-    console.log(length+"/"+today)
-
-    
-    
-    var attach=[];
-
-    for(let i=0;i<length;i++){
-
-      attach.push(
-          {filename: `output${i}.pdf`,
-          //path:__dirname +'/output.pdf',
-          content: fs.createReadStream(__dirname +`/output${i}.pdf`),
-          //contentType: 'application/pdf'
-      })
-    }
-
-    var mailOptions = {
-      from: 'elff931@gmail.com',
-      to: 'esali.softlinn@gmail.com',
-      subject: "Reports( " +today+" )",
-      html: '<b>Hello world attachment test HTML</b>',
-      attachments: attach,
-     }
-    mail.sendMail(mailOptions, function(error, info){
-      if (error) {
-        console.log(error);
-      } else {
-        console.log('Email sent: ' + info.response);
-      }
-  });
-  }
-
-});
-
-//.....
-
-function getFileStream(fileKey) {
-  const params = {
-    Key: fileKey,
-    Bucket: 'control-location/images'
-  }
-
-return  s3.getObject(params).createReadStream();
-}
-
-
-const filePath="./images/+fileKey";
-  s3.getObject(downloadParams, (err, data) => {
-    if (err) console.error(err);
-    fs.writeFileSync(filePath, data.Body.toString());
-    console.log(`${filePath} has been created!`);
-    console.log(`${filePath} has been created!`);
-  });
-  return filePath;
-  
-  const data= await s3.getObject(downloadParams).createReadStream();
-  console.log(data);
-  return data.Body.toString(); 
- //...... 
-  
-  */
 
 
 app.post('/createPdfReport', (req, res, next) => {
@@ -909,7 +621,10 @@ app.post("/updatetel/:id", function (req, res) {
   });
 });
 
-
+let cron = require('node-cron');
+cron.schedule('45 13 * * *', () => {
+  console.log("cron çalıştı");
+});
 
 
 
