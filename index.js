@@ -71,12 +71,13 @@ app.post("/updatedesc/:id",taskController.updateDesc);
 app.post('/uploadphoto/:id',taskController.updatePhoto);
 
 
-app.post('/createPdfReport',scheduledJob.createPdfSendMail);
+
 
 
 let cron = require('node-cron');
-cron.schedule('45 13 * * *', () => {
+cron.schedule('30 19 * * *', () => {
   console.log("cron çalıştı");
+  createPdfAndSendEmail();
 });
 
 
