@@ -1,10 +1,7 @@
 require("dotenv").config();
 
-
-
 const { Passport } = require("passport");
 const passport = require("passport");
-
 
 const multer = require('multer');
 const multerS3 = require('multer-s3');
@@ -32,13 +29,10 @@ const storage2 = multerS3({
 var upload2 = multer({ storage: storage2 });
 
 const Kullanici = require("../models/kullaniciModel");
-
 passport.use(Kullanici.createStrategy()); // Kullanıcı Şeması ile passport arasında bağlantı kurduk.
-
 passport.serializeUser(function (user, done) {
     done(null, user.id);
   });
-  
 passport.deserializeUser(function (id, done) {
     Kullanici.findById(id, function (err, user) {
       done(err, user);
@@ -123,8 +117,6 @@ exports.userPhoto= (req, res, next) => {
         if(err){
             console.log(err)
         }else{
-
-        }
         userresimlinki = req.file.location;
         console.log(userresimlinki);
         Kullanici.updateOne(
@@ -141,8 +133,9 @@ exports.userPhoto= (req, res, next) => {
               }
             }
         );
+        }
     })
-    
+   
 }
 
 exports.updateMail=function (req, res) {

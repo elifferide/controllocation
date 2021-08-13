@@ -19,6 +19,7 @@ const multerS3 = require('multer-s3');
 
 
 const userController=require("./controllers/userController")
+const taskController=require("./controllers/taskController")
 
 const Kullanici = require("./models/kullaniciModel");
 const Task=require("./models/taskModel");
@@ -110,149 +111,12 @@ app.post("/getuser/:id",userController.getUser);
 
 
 
-app.post("/taskcreate", function (req, res) {
-  var hour=new Date().getHours();
-  var date=new Date().getDate();
-  if (hour>=18 && hour<24){
-    date=date+1;
-  } else {
-    date=date
-  }
-    var month = new Date().getMonth() + 1;
-    var year = new Date().getFullYear();
-    var taskDate=date + "-" + month + "-" + year;
-    
-  
-  var task = new Task({
-    user_id:req.body.userId,
-    adress: req.body.adress,
-    lat: req.body.lat,
-    long: req.body.long,
-    passedTime:"",
-    desc:"",
-    taskDate:taskDate,
-    photoUrl:"",
-  });
-
-  task.save(function (err) {
-    if (!err) {
-      res.send([
-        {
-          sonuc: "başarılı",
-        },
-      ]);
-    } else {
-      res.send([
-        {
-          sonuc: "hata",
-        },
-      ]);
-    }
-  });
-});
-
-app.post("/gettask", function (req, res) {
-  var id=req.body.userId;
-  var hour=new Date().getHours();
-  var date = new Date().getDate();
-  var month = new Date().getMonth() + 1;
-  var year = new Date().getFullYear();
-  var today;
-  if (hour>=18 && hour<24){
-    today= (date+1) + "-" + month + "-" + year;
-  } else {
-    today= date + "-" + month + "-" + year;
-  }
-
- /* console.log(today);*/
-  Task.find({user_id:id,taskDate:today }, function (err, gelenVeri) {
-    if (!err) {
-      res.send(gelenVeri);
-
-    } else {
-      res.send([
-        {
-          sonuc: "hata",
-        },
-      ]);
-    }
-  });
-});
-
-
-app.post("/deletetask/:id", function (req, res) {
-  Task.deleteOne({ _id: req.params.id }, function (err) {
-    if (!err) {
-      res.send([
-        {
-          sonuc: "başarılı",
-        },
-      ]);
-    } else {
-      res.send([
-        {
-          sonuc: "hata",
-        },
-      ]);
-    }
-  });
-});
-
-app.post("/updatetask/:id", function (req, res) {
-
-  Task.updateOne(
-    { _id: req.params.id ,passedTime:""},
-    {     
-        passedTime: req.body.passedTime
-      },
-    function (err) {
-      if (err) {
-        res.send({ sonuc: false });
-      } else {
-        res.send({ sonuc: true });
-      }
-    }
-  );
-});
-
-app.post("/updatedesc/:id", function (req, res) {
-  Task.updateOne(
-    { _id: req.params.id },
-    {        
-        desc: req.body.desc,
-    },
-    function (err) {
-      if (err) {
-        res.send({ sonuc: false });
-      } else {
-        res.send({ sonuc: true });
-      }
-    }
-  );
-});
-
-app.post('/uploadphoto/:id', upload.single('photo'), (req, res, next) => {
-  var resimlinki = "";
- 
-  if(req.file){
-   console.log(req.file.location);
-    resimlinki = req.file.location;
-    }
-  console.log(resimlinki);
-  Task.updateOne(
-    { _id: req.params.id },
-    {        
-        photoUrl:resimlinki,
-    },
-    function (err) {
-      if (err) {
-        res.send({ sonuc: false });
-      } else {
-        res.send({ sonuc: true });
-      }
-    }
-  );
-})
+app.post("/taskcreate", taskController.createTask);
+app.post("/gettask", taskController.getAllTasks);
+app.post("/deletetask/:id",taskController.deleteTask);
+app.post("/updatepassedtime/:id",taskController.updatePassedTime );
+app.post("/updatedesc/:id",taskController.updateDesc);
+app.post('/uploadphoto/:id',taskController.updatePhoto);
 
 
 
