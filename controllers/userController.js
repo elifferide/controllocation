@@ -1,5 +1,5 @@
 require("dotenv").config();
-const express = require("express");
+
 
 
 const { Passport } = require("passport");
@@ -10,11 +10,13 @@ const multer = require('multer');
 const multerS3 = require('multer-s3');
 const aws= require('aws-sdk');
 const S3=require("aws-sdk/clients/s3");
+
 const s3 = new aws.S3({
     region: process.env.AWS_BUCKET_REGION,
     accessKeyId:process.env.S3_ACCESS_KEY,
     secretAccessKey:process.env.S3_SECRET_ACCESS_KEY
 });
+
 const storage2 = multerS3({
     s3: s3,
     bucket: 'control-location/images',
@@ -114,11 +116,13 @@ exports.userLogout= function (req, res) {
 
 exports.userPhoto= upload2.single('photo'), (req, res, next) => {
     var userresimlinki = "";
-  
+    console.log("uploadphoto");
   
     if(req.file){
       userresimlinki = req.file.location;
+      console.log(userresimlinki);
     }
+
     Kullanici.updateOne(
       { _id: req.params.id },
       {        
@@ -129,6 +133,7 @@ exports.userPhoto= upload2.single('photo'), (req, res, next) => {
           res.send({ sonuc: false });
         } else {
           res.send({ sonuc: true });
+          console.log("Saved url")
         }
       }
     );
