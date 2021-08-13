@@ -116,8 +116,8 @@ exports.userLogout= function (req, res) {
 
 exports.userPhoto= upload2.single('photo'), (req, res, next) => {
     var userresimlinki = "";
-    console.log("uploadphoto");
-  
+   
+  console.log("URL=" +req.file.location);
     if(req.file){
       userresimlinki = req.file.location;
       console.log(userresimlinki);
