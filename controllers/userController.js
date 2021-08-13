@@ -8,18 +8,6 @@ const session = require("express-session");
 const Kullanici = require("../models/kullaniciModel");
 
 
-app.use(
-    session({
-      secret: "Softlinn-ProjectApp",
-      resave: true,
-      saveUninitialized: true,
-      name: "kullanici_bilgileri",
-      proxy: true,
-    })
-  );
-  
-  app.use(passport.initialize());
-  app.use(passport.session());
 
   passport.use(Kullanici.createStrategy()); // Kullanıcı Şeması ile passport arasında bağlantı kurduk.
 
