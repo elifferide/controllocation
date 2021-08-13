@@ -114,27 +114,31 @@ exports.userLogout= function (req, res) {
     res.send({ sonuc: "başarılı" });
 }
 
-exports.userPhoto= upload2.single('photo'), (req, res, next) => {
-    var userresimlinki = "";
+exports.userPhoto= (req, res, next) => {
+    const uploadPhoto=upload2.single('photo');
+    uploadPhoto(req,res,async(err)=>{
+        var userresimlinki = "";
    
-  console.log("URL=" +req.file.location);
-    if(req.file){
-      userresimlinki = req.file.location;
-      console.log(userresimlinki);
-    }
-
-    Kullanici.updateOne(
-      { _id: req.params.id },
-      {        
-          photo_url:userresimlinki,
-      },
-      function (err) {
-        if (err) {
-          res.send({ sonuc: false });
-        } else {
-          res.send({ sonuc: true });
-          console.log("Saved url")
-        }
-      }
-    );
+        console.log("URL=" +req.file.location);
+          if(req.file){
+            userresimlinki = req.file.location;
+            console.log(userresimlinki);
+          }
+      
+          Kullanici.updateOne(
+            { _id: req.params.id },
+            {        
+                photo_url:userresimlinki,
+            },
+            function (err) {
+              if (err) {
+                res.send({ sonuc: false });
+              } else {
+                res.send({ sonuc: true });
+                console.log("Saved url")
+              }
+            }
+          );
+    })
+    
   }
