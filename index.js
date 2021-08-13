@@ -72,13 +72,12 @@ app.post('/uploadphoto/:id',taskController.updatePhoto);
 
 
 
-/*
 let cron = require('node-cron');
-cron.schedule('30 19 * * *', () => {
+cron.schedule('45 18 * * *', () => {
   console.log("cron çalıştı");
   createPdfAndSendEmail();
 });
-*/
+
 
 const port=process.env.PORT || 5000;
 app.listen(port, ()=>{
