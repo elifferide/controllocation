@@ -17,6 +17,9 @@ const S3=require("aws-sdk/clients/s3");
 const aws= require('aws-sdk');
 const multerS3 = require('multer-s3');
 
+
+const userController=require("./controllers/userController")
+
 const Kullanici = require("./models/kullaniciModel");
 const Task=require("./models/taskModel");
 
@@ -67,7 +70,7 @@ app.use(
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-const Schema = mongoose.Schema;
+
 
 mongoose
   .connect(process.env.BAGLANTI, {
@@ -77,23 +80,12 @@ mongoose
   .then(() => console.log("Database connected!"))
   .catch((err) => console.log(err));
 
-app.use(
-  session({
-    secret: "Softlinn-ProjectApp",
-    resave: true,
-    saveUninitialized: true,
-    name: "kullanici_bilgileri",
-    proxy: true,
-  })
-);
 
-app.use(passport.initialize());
-app.use(passport.session());
 
 app.get("/", function (req, res) {
   res.send("Başarılı..");
 });
-
+/*
 passport.use(Kullanici.createStrategy()); // Kullanıcı Şeması ile passport arasında bağlantı kurduk.
 
 passport.serializeUser(function (user, done) {
@@ -105,74 +97,13 @@ passport.deserializeUser(function (id, done) {
     done(err, user);
   });
 });
+*/
 
-app.post("/api/kullanici/olusturma", function (req, res) {
-  Kullanici.register(
-    //Kullanıcı modeline register işlemi gerçekleştir.
-    {
-      ///Kayıt için gerekli bilgiler
-      isim: req.body.isim,
-      soyisim: req.body.soyisim,
-      username: req.body.username,
-      telefon: req.body.telefon,
-      email: req.body.email,
-      approval:false,
-      photo_url:"",
-    },
-    //Kayıt için gerekli şifre
-    req.body.sifre,
+app.post("/api/kullanici/olusturma",userController.createUser);
 
-    // fonksiyon
-    function (err, gelenVeri) {
-      if (err) {
-        //UserExistError
-        if (err.name === "UserExistsError") {
-          res.send({ sonuc: "username" });
-        } else {
-          res.send({ sonuc: "hata" });
-          console.log(err);
-        }
-      } else {
-        passport.authenticate("local")(req, res, function () {
-          res.send({ sonuc: "başarılı" }); //giriş işlemi gerçekleşsin
-        });
-      }
-    }
-  );
-});
+app.post("/login",userController.userLogin );
 
-app.post("/login", function (req, res) {
-  const kullanici = new Kullanici({
-    username: req.body.username,
-    sifre: req.body.password,
-  });
-  req.login(kullanici, function (err) {
-    if (err) {
-      res.send({ sonuc: false });
-    } else{
-      passport.authenticate("local")(req, res, function () {
-        Kullanici.find({username:kullanici.username}, function (err, gelenVeri) {
-          if (!err) {
-            res.send({user:gelenVeri,sonuc:true});
-          } else {
-            res.send(
-              {
-                sonuc: "hata",
-              }
-            );
-          }
-        });
-      });
-    
-
-    } 
-  });
-});
-
-app.get("/logout", function (req, res) {
-  req.logout();
-  res.send({ sonuc: "başarılı" });
-});
+app.get("/logout",userController.userLogout);
 
 
 
