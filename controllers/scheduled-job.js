@@ -260,4 +260,3 @@ function sendMail(length,today){
      
   
 
-createPdfAndSendEmail();
