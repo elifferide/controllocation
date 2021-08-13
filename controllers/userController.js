@@ -7,17 +7,6 @@ const session = require("express-session");
 
 const Kullanici = require("../models/kullaniciModel");
 
-passport.use(Kullanici.createStrategy()); // Kullanıcı Şeması ile passport arasında bağlantı kurduk.
-
-passport.serializeUser(function (user, done) {
-  done(null, user.id);
-});
-
-passport.deserializeUser(function (id, done) {
-  Kullanici.findById(id, function (err, user) {
-    done(err, user);
-  });
-});
 
 app.use(
     session({
@@ -31,6 +20,19 @@ app.use(
   
   app.use(passport.initialize());
   app.use(passport.session());
+
+  passport.use(Kullanici.createStrategy()); // Kullanıcı Şeması ile passport arasında bağlantı kurduk.
+
+  passport.serializeUser(function (user, done) {
+    done(null, user.id);
+  });
+  
+  passport.deserializeUser(function (id, done) {
+    Kullanici.findById(id, function (err, user) {
+      done(err, user);
+    });
+  });
+  
 
 exports.createUser= function (req, res) {
     Kullanici.register(
