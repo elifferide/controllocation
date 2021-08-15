@@ -168,7 +168,7 @@ const fetchImage = async (src) => {
   return image;
 }; 
 
-async function generateTable(doc, gelenVeri) {
+function generateTable(doc, gelenVeri) {
     let invoiceTableTop = 150;
     generateHr(doc,invoiceTableTop+ 40);
     for (let i = 0; i < gelenVeri.length; i++) {
@@ -183,7 +183,7 @@ async function generateTable(doc, gelenVeri) {
         const item = gelenVeri[i];
         const position = invoiceTableTop + (j+1) *120;
 
-        const img = await fetchImage(item.photoUrl);
+      
 
       generateTableRow(
         doc,
@@ -191,7 +191,7 @@ async function generateTable(doc, gelenVeri) {
         item.adress,
         item.passedTime,
         item.desc,
-        img
+        item.photoUrl
         );
       generateHr(doc, position+ 50);
     }
@@ -206,8 +206,8 @@ function generateHr(doc, y) {
         .stroke();
 }
 
-function generateTableRow(doc, y, c1, c2, c3,c4) {
-   
+async function generateTableRow(doc, y, c1, c2, c3,c4) {
+  const img = await fetchImage(c4);
 
       doc
       .fontSize(10)
@@ -223,7 +223,7 @@ function generateTableRow(doc, y, c1, c2, c3,c4) {
       .text("Description:", 50, (y))
       .font('Times-Roman')
       .text(c3,120, (y),{ width: 280})
-      .image(c4, 450, (y-60), {align: "right", width: 80,height:100 })
+      .image(img, 450, (y-60), {align: "right", width: 80,height:100 })
       .moveDown()
 }
     
