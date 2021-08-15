@@ -85,14 +85,14 @@ function createPdfAndSendEmail() {
             })           
           }
          
-          sendMail(users.length,today);
+         // sendMail(users.length,today);
 
         } 
       });
 }  
   
 
- function  createPdf(gelenVeri,user,index,planned,today){
+ async function  createPdf(gelenVeri,user,index,planned,today){
     console.log("GelenVeri="+gelenVeri);
      
     const doc = new PDFDocument();
@@ -138,7 +138,32 @@ function createPdfAndSendEmail() {
         .fontSize(25)
         .text(`Planned: ${planned}  Visited: ${gelenVeri.length}`,{align: "center"})
        
-        generateTable(doc, gelenVeri);
+        let invoiceTableTop = 150;
+        generateHr(doc,invoiceTableTop+ 40);
+        for (let i = 0; i < gelenVeri.length; i++) {
+           let j=i;
+            if(i%4===0 && i!==0){
+              j=0;
+              doc
+              .addPage(); 
+            } 
+            if(i%4===1){j=1} if(i%4===2){j=2} if(i%4===3){j=3} if(i===0){j=i}
+    
+            const item = gelenVeri[i];
+            const position = invoiceTableTop + (j+1) *120;
+            const img = await fetchImage(item.photoUrl);
+          
+    
+          generateTableRow(
+            doc,
+            position,
+            item.adress,
+            item.passedTime,
+            item.desc,
+            img
+            );
+          generateHr(doc, position+ 50);
+        }
         
         doc.end();    
         console.log("pdf"+index+ " oluştu...")  ;
@@ -168,7 +193,7 @@ const fetchImage = async (src) => {
   return image;
 }; 
 
-async function generateTable(doc, gelenVeri) {
+function generateTable(doc, gelenVeri) {
     let invoiceTableTop = 150;
     generateHr(doc,invoiceTableTop+ 40);
     for (let i = 0; i < gelenVeri.length; i++) {
@@ -182,7 +207,7 @@ async function generateTable(doc, gelenVeri) {
 
         const item = gelenVeri[i];
         const position = invoiceTableTop + (j+1) *120;
-        const img =await fetchImage('https://control-location.s3.amazonaws.com/images/placesimage779.jpeg');
+        const img = fetchImage('https://control-location.s3.amazonaws.com/images/placesimage779.jpeg');
       
 
       generateTableRow(
@@ -191,7 +216,7 @@ async function generateTable(doc, gelenVeri) {
         item.adress,
         item.passedTime,
         item.desc,
-        item.photoUrl
+        img
         );
       generateHr(doc, position+ 50);
     }
@@ -223,7 +248,7 @@ function generateHr(doc, y) {
       .text("Description:", 50, (y))
       .font('Times-Roman')
       .text(c3,120, (y),{ width: 280})
-      .image(img, 450, (y-60), {align: "right", width: 80,height:100 })
+      .image(c4, 450, (y-60), {align: "right", width: 80,height:100 })
       .moveDown()
 }
     
