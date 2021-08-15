@@ -1,7 +1,19 @@
 const fs = require('fs');
 const fetch = require('node-fetch')
 const PDFDocument = require('pdfkit');
+const path=require("path");
 
+
+const S3=require("aws-sdk/clients/s3");
+const aws= require('aws-sdk');
+
+
+
+const s3 = new aws.S3({
+    region: process.env.AWS_BUCKET_REGION,
+    accessKeyId:process.env.S3_ACCESS_KEY,
+    secretAccessKey:process.env.S3_SECRET_ACCESS_KEY
+});
 
 const fetchImage = async (src) => {
     const response = await fetch(src);
@@ -20,7 +32,7 @@ const fetchImage = async (src) => {
 
     doc.image(img, 0, 200);
     doc.end();
-    
+
     writeStream.on('finish', function () {
         var appDir = path.dirname(require.main.filename);
         console.log("appDir=" +appDir);
