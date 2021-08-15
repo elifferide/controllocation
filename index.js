@@ -61,7 +61,6 @@ app.post("/getuser/:id",userController.getUser);
 
 
 
-
 app.post("/taskcreate", taskController.createTask);
 app.post("/gettask", taskController.getAllTasks);
 app.post("/deletetask/:id",taskController.deleteTask);

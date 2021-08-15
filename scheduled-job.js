@@ -223,7 +223,7 @@ function generateTableRow(doc, y, c1, c2, c3,c4) {
       .text("Description:", 50, (y))
       .font('Times-Roman')
       .text(c3,120, (y),{ width: 280})
-      //.image(imageUrl, 450, (y-60), {align: "right", width: 80,height:100 })
+      //.image(c4, 450, (y-60), {align: "right", width: 80,height:100 })
       .moveDown()
 }
     
@@ -261,5 +261,5 @@ function sendMail(length,today){
 
 createPdfAndSendEmail();
 
-module.exports=createPdfAndSendEmail;  
+
 
