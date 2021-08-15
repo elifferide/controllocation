@@ -85,7 +85,7 @@ function createPdfAndSendEmail() {
             })           
           }
          
-         // sendMail(users.length,today);
+       sendMail(users.length,today);
 
         } 
       });
@@ -152,8 +152,7 @@ function createPdfAndSendEmail() {
             const item = gelenVeri[i];
             const position = invoiceTableTop + (j+1) *120;
             const img = await fetchImage(item.photoUrl);
-          
-    
+              
           generateTableRow(
             doc,
             position,
