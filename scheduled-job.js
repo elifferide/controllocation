@@ -5,6 +5,7 @@ const PDFDocument = require('pdfkit');
 const fs = require('fs')
 const path=require("path");
 const mongoose = require("mongoose");
+const fetch = require('node-fetch')
 
 const Kullanici = require("./models/kullaniciModel");
 const Task=require("./models/taskModel");
@@ -161,7 +162,13 @@ function  createPdf(gelenVeri,user,index,planned,today){
       }
 }   
 
-function generateTable(doc, gelenVeri) {
+const fetchImage = async (src) => {
+  const response = await fetch(src);
+  const image = await response.buffer();
+  return image;
+}; 
+
+async function generateTable(doc, gelenVeri) {
     let invoiceTableTop = 150;
     generateHr(doc,invoiceTableTop+ 40);
     for (let i = 0; i < gelenVeri.length; i++) {
@@ -175,23 +182,18 @@ function generateTable(doc, gelenVeri) {
 
         const item = gelenVeri[i];
         const position = invoiceTableTop + (j+1) *120;
-       /* const readStream=getFileStream(item.photoUrl);
-        var writeStream2 = fs.createWriteStream(`photo${item.taskDate}-${new Date().getMilliseconds()}.jpeg`);
-        readStream.pipe(writeStream2);
-        var pathDir;
-        
-        var appDir = path.dirname(require.main.filename);
-        console.log("appDir=" +appDir + `/photo${item.taskDate}-${new Date().getMilliseconds()}.jpeg`);
-        pathDir=appDir + `/photo${item.taskDate}-${new Date().getMilliseconds()}.jpeg`
-       */
-       
+
+        const img = await fetchImage("https://control-location.s3.amazonaws.com/images/placesimage799.jpeg");
+
+
+
         generateTableRow(
         doc,
         position,
         item.adress,
         item.passedTime,
         item.desc,
-        item.photoUrl
+        img
         );
         generateHr(doc, position+ 50);
     }
@@ -208,17 +210,6 @@ function generateHr(doc, y) {
 
 function generateTableRow(doc, y, c1, c2, c3,c4) {
     console.log("C4="+ c4);
-  
-    async function fetchImage(src) {
-      const image = await axios
-          .get(src, {
-              responseType: 'arraybuffer'
-          })
-      return image.data;
-  }
-  
-  const logo = fetchImage(c4);
-  
 
       doc
       .fontSize(10)
