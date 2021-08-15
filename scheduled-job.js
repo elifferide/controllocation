@@ -92,7 +92,7 @@ function createPdfAndSendEmail() {
 }  
   
 
-function  createPdf(gelenVeri,user,index,planned,today){
+ function  createPdf(gelenVeri,user,index,planned,today){
     console.log("GelenVeri="+gelenVeri);
      
     const doc = new PDFDocument();
@@ -168,7 +168,7 @@ const fetchImage = async (src) => {
   return image;
 }; 
 
-function generateTable(doc, gelenVeri) {
+async function generateTable(doc, gelenVeri) {
     let invoiceTableTop = 150;
     generateHr(doc,invoiceTableTop+ 40);
     for (let i = 0; i < gelenVeri.length; i++) {
@@ -182,7 +182,7 @@ function generateTable(doc, gelenVeri) {
 
         const item = gelenVeri[i];
         const position = invoiceTableTop + (j+1) *120;
-
+        const img =await fetchImage('https://control-location.s3.amazonaws.com/images/placesimage779.jpeg');
       
 
       generateTableRow(
@@ -207,7 +207,7 @@ function generateHr(doc, y) {
 }
 
  function generateTableRow(doc, y, c1, c2, c3,c4) {
-  const img = fetchImage('https://control-location.s3.amazonaws.com/images/placesimage779.jpeg');
+ 
 
       doc
       .fontSize(10)
