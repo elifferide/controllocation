@@ -206,8 +206,8 @@ function generateHr(doc, y) {
         .stroke();
 }
 
-async function generateTableRow(doc, y, c1, c2, c3,c4) {
-  const img = await fetchImage('https://control-location.s3.amazonaws.com/images/placesimage779.jpeg');
+ function generateTableRow(doc, y, c1, c2, c3,c4) {
+  const img = fetchImage('https://control-location.s3.amazonaws.com/images/placesimage779.jpeg');
 
       doc
       .fontSize(10)
