@@ -183,11 +183,9 @@ async function generateTable(doc, gelenVeri) {
         const item = gelenVeri[i];
         const position = invoiceTableTop + (j+1) *120;
 
-        const img = await fetchImage("https://control-location.s3.amazonaws.com/images/placesimage799.jpeg");
+        const img = await fetchImage(item.photoUrl);
 
-
-
-        generateTableRow(
+      generateTableRow(
         doc,
         position,
         item.adress,
@@ -195,7 +193,7 @@ async function generateTable(doc, gelenVeri) {
         item.desc,
         img
         );
-        generateHr(doc, position+ 50);
+      generateHr(doc, position+ 50);
     }
 }
 
@@ -225,7 +223,7 @@ function generateTableRow(doc, y, c1, c2, c3,c4) {
       .text("Description:", 50, (y))
       .font('Times-Roman')
       .text(c3,120, (y),{ width: 280})
-      .image(logo, 450, (y-60), {align: "right", width: 80,height:100 })
+      .image(c4, 450, (y-60), {align: "right", width: 80,height:100 })
       .moveDown()
 }
     
