@@ -13,11 +13,28 @@ const fetchImage = async (src) => {
 (async function start() {
 
     const doc = new PDFDocument;
-    doc.pipe(fs.createWriteStream('./file.pdf'));
+    let writeStream = fs.createWriteStream(`outputdeneme.pdf`);
+    doc.pipe(writeStream);
 
     const img = await fetchImage("https://control-location.s3.amazonaws.com/images/placesimage799.jpeg");
 
     doc.image(img, 0, 200);
     doc.end();
-
+    
+    writeStream.on('finish', function () {
+        var appDir = path.dirname(require.main.filename);
+        console.log("appDir=" +appDir);
+        const fileContent = fs.readFileSync(appDir + `/outputdeneme.pdf`);
+        var params = {
+          Key : `outputdeneme.pdf`,
+          Body : fileContent,
+          Bucket : 'control-location/reports',
+          ContentType : 'application/pdf',
+          ACL: "public-read",
+        } ;
+  
+        s3.upload(params, function(err, response) {
+          console.log("pdf"+index+"gönderildi.");
+        });
+    })
 })() 

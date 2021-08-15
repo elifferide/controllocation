@@ -207,7 +207,7 @@ function generateHr(doc, y) {
 }
 
 function generateTableRow(doc, y, c1, c2, c3,c4) {
-    console.log("C4="+ c4);
+   
 
       doc
       .fontSize(10)
