@@ -104,7 +104,7 @@ function createPdfAndSendEmail() {
     
     if(gelenVeri.length===0){
        console.log("pdf boş"); // User's visited task is zero
-       let writeStream = fs.createWriteStream(`output${index}.pdf`);
+       let writeStream = fs.createWriteStream(`output${index}${today}.pdf`);
        //Pdf creation begins
         doc.pipe(writeStream);
         // doc.pipe(fs.createWriteStream(`output${index}.pdf`));
@@ -118,7 +118,7 @@ function createPdfAndSendEmail() {
         writeStream.on('finish', function () {
           var appDir = path.dirname(require.main.filename);
           console.log("appDir=" +appDir);
-          const fileContent = fs.readFileSync(appDir + `/output${index}.pdf`);
+          const fileContent = fs.readFileSync(appDir + `/output${index}${today}.pdf`);
           var params = {
             Key : `output${index}.pdf`,
             Body : fileContent,
@@ -133,7 +133,7 @@ function createPdfAndSendEmail() {
         })
     } else  {
         // There are user's visited tasks. 
-        let writeStream = fs.createWriteStream(`output${index}.pdf`);
+        let writeStream = fs.createWriteStream(`output${index}${today}.pdf`);
         //Pdf creation begins
         doc.pipe(writeStream);
         //doc.pipe(fs.createWriteStream(`output${index}.pdf`));
@@ -175,9 +175,9 @@ function createPdfAndSendEmail() {
         writeStream.on('finish', function () {
           var appDir = path.dirname(require.main.filename);
           console.log("appDir=" +appDir);
-          const fileContent = fs.readFileSync(appDir + `/output${index}.pdf`);
+          const fileContent = fs.readFileSync(appDir + `/output${index}${today}.pdf`);
           var params = {
-            Key : `output${index}.pdf`,
+            Key : `output${index}${today}.pdf`,
             Body : fileContent,
             Bucket : 'control-location/reports',
             ContentType : 'application/pdf',
