@@ -89,8 +89,11 @@ function createPdfAndSendEmail() {
                   }
             })           
           }
-         
-       sendMail(users.length,today);
+          var timeOut= 1000 * 60;
+          setTimeout(function() {
+            sendMail(users.length,today)
+          }, timeOut);  
+       
 
         } 
       });
