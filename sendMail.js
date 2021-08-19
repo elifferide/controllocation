@@ -20,7 +20,15 @@ var mail = nodemailer.createTransport(smtpTransport({
 const Kullanici = require("./models/kullaniciModel");
 
 function sendMail(){
-    const length=Kullanici.find().length();
+    var length;
+    Kullanici.find({},function(err,users){
+        if(err){
+          console.log(err);
+        }else{
+        
+        length=users.length;
+        }
+    });
 
     var date = new Date().getDate();
     var month = new Date().getMonth() + 1;
