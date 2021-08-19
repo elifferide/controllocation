@@ -14,6 +14,8 @@ const S3=require("aws-sdk/clients/s3");
 const aws= require('aws-sdk');
 const multerS3 = require('multer-s3');
 
+
+
 mongoose
   .connect(process.env.BAGLANTI, {
     useNewUrlParser: true,
@@ -29,8 +31,11 @@ const s3 = new aws.S3({
 });
 
 var nodemailer = require('nodemailer');
-var mail = nodemailer.createTransport({
+var smtpTransport = require('nodemailer-smtp-transport');
+
+var mail = nodemailer.createTransport(smtpTransport({
   service: 'gmail',
+  host:'smtp.gmail.com',
   secure: true,
   auth: {
     user: process.env.USER_MAIL,
@@ -39,7 +44,7 @@ var mail = nodemailer.createTransport({
   tls:{
     rejectUnauthorized:false,
   }
-});
+}));
 
 
 function createPdfAndSendEmail() {
@@ -258,8 +263,8 @@ function sendMail(length,today){
         for(let i=0;i<length;i++){
     
           attach.push(
-              {filename: `output${i}.pdf`,
-              path:'https://control-location.s3.amazonaws.com/reports/' +`output${i}.pdf`,
+              {filename: `output${i}${today}.pdf`,
+              path:'https://control-location.s3.amazonaws.com/reports/' +`output${i}${today}.pdf`,
               //content: fs.createReadStream(__dirname +`/output${i}.pdf`),
               //contentType: 'application/pdf'
            
