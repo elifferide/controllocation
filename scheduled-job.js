@@ -120,7 +120,7 @@ function createPdfAndSendEmail() {
           console.log("appDir=" +appDir);
           const fileContent = fs.readFileSync(appDir + `/output${index}${today}.pdf`);
           var params = {
-            Key : `output${index}.pdf`,
+            Key : `output${index}${today}.pdf`,
             Body : fileContent,
             Bucket : 'control-location/reports',
             ContentType : 'application/pdf',
