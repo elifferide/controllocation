@@ -104,7 +104,7 @@ function createPdfAndSendEmail() {
     
     if(gelenVeri.length===0){
        console.log("pdf boş"); // User's visited task is zero
-       let writeStream = fs.createWriteStream(`output${index}${today}.pdf`);
+       let writeStream = fs.createWriteStream(`output${index}-${today}.pdf`);
        //Pdf creation begins
         doc.pipe(writeStream);
         // doc.pipe(fs.createWriteStream(`output${index}.pdf`));
@@ -118,9 +118,9 @@ function createPdfAndSendEmail() {
         writeStream.on('finish', function () {
           var appDir = path.dirname(require.main.filename);
           console.log("appDir=" +appDir);
-          const fileContent = fs.readFileSync(appDir + `/output${index}${today}.pdf`);
+          const fileContent = fs.readFileSync(appDir + `/output${index}-${today}.pdf`);
           var params = {
-            Key : `output${index}${today}.pdf`,
+            Key : `output${index}-${today}.pdf`,
             Body : fileContent,
             Bucket : 'control-location/reports',
             ContentType : 'application/pdf',
@@ -133,7 +133,7 @@ function createPdfAndSendEmail() {
         })
     } else  {
         // There are user's visited tasks. 
-        let writeStream = fs.createWriteStream(`output${index}${today}.pdf`);
+        let writeStream = fs.createWriteStream(`output${index}-${today}.pdf`);
         //Pdf creation begins
         doc.pipe(writeStream);
         //doc.pipe(fs.createWriteStream(`output${index}.pdf`));
@@ -175,9 +175,9 @@ function createPdfAndSendEmail() {
         writeStream.on('finish', function () {
           var appDir = path.dirname(require.main.filename);
           console.log("appDir=" +appDir);
-          const fileContent = fs.readFileSync(appDir + `/output${index}${today}.pdf`);
+          const fileContent = fs.readFileSync(appDir + `/output${index}-${today}.pdf`);
           var params = {
-            Key : `output${index}${today}.pdf`,
+            Key : `output${index}-${today}.pdf`,
             Body : fileContent,
             Bucket : 'control-location/reports',
             ContentType : 'application/pdf',
@@ -263,8 +263,8 @@ function sendMail(length,today){
         for(let i=0;i<length;i++){
     
           attach.push(
-              {filename: `output${i}${today}.pdf`,
-              path:'https://control-location.s3.amazonaws.com/reports/' +`output${i}${today}.pdf`,
+              {filename: `output${i}-${today}.pdf`,
+              path:'https://control-location.s3.amazonaws.com/reports/' +`output${i}-${today}.pdf`,
               //content: fs.createReadStream(__dirname +`/output${i}.pdf`),
               //contentType: 'application/pdf'
            
