@@ -30,6 +30,7 @@ const Task= require("../models/taskModel");
 exports.createTask=function (req, res) {
     var hour=new Date().getHours();
     var date=new Date().getDate();
+    console.log(date);
     if (hour>=18 && hour<24){
       date=date+1;
     } else {

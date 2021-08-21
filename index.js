@@ -69,7 +69,25 @@ app.post("/updatedesc/:id",taskController.updateDesc);
 app.post('/uploadphoto/:id',taskController.updatePhoto);
 
 
-
+app.post('/changePassword', function (req, res) {
+  if (typeof req.user === 'undefined') {
+      res.redirect('/login')
+  } else {
+      User.findOne({ _id: req.user._id }, function (err, user) {
+          if (!err) {
+              user.changePassword(req.body.oldPassword, req.body.newPassword, function (err) {
+                  if (!err) {
+                      res.redirect('/login')
+                  } else {
+                      console.log(err);
+                  }
+              })
+          } else {
+              console.log(err);
+          }
+      })
+  }
+})
 
 let cron = require('node-cron');
 cron.schedule('45 18 * * *', () => {
