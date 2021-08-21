@@ -31,6 +31,7 @@ exports.createTask=function (req, res) {
     var hour=new Date().getHours();
     var date=new Date().getDate();
     console.log(date);
+    console.log(hour);
     if (hour>=18 && hour<24){
       date=date+1;
     } else {
