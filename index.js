@@ -87,7 +87,7 @@ app.post("/changePassword", function (req, res) {
 });
 
 let cron = require("node-cron");
-cron.schedule("14 18 * * *", () => {
+cron.schedule("40 18 * * *", () => {
   console.log("Cron çalıştı");
   createPdfAndSendEmail();
 });
