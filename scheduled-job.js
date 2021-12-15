@@ -132,7 +132,7 @@ async function createPdf(gelenVeri, user, index, planned, today) {
       var params = {
         Key: `output${index}-${today}.pdf`,
         Body: fileContent,
-        Bucket: "control-location1",
+        Bucket: "control-location1/reports",
         ContentType: "application/pdf",
         ACL: "public-read",
       };
