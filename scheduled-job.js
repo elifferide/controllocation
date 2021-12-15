@@ -113,7 +113,7 @@ async function createPdf(gelenVeri, user, index, planned, today) {
     let writeStream = fs.createWriteStream(`output${index}-${today}.pdf`);
     //Pdf creation begins
     doc.pipe(writeStream);
-    // doc.pipe(fs.createWriteStream(`output${index}.pdf`));
+    doc.pipe(fs.createWriteStream(`output${index}.pdf`));
     doc
       .fontSize(35)
       .text(`${user.isim} ${user.soyisim}'s Report (${today})`, {
@@ -205,13 +205,17 @@ async function createPdf(gelenVeri, user, index, planned, today) {
       var params = {
         Key: `output${index}-${today}.pdf`,
         Body: fileContent,
-        Bucket: "control-location1",
+        Bucket: "control-location1/reports",
         ContentType: "application/pdf",
         ACL: "public-read",
       };
 
       s3.upload(params, function (err, response) {
-        console.log("pdf" + index + "gönderildi.");
+        if (err) {
+          console.log(err);
+        } else {
+          console.log("pdf" + index + "gönderildi.");
+        }
       });
     });
   }
@@ -294,13 +298,13 @@ function sendMail(length, today) {
     attach.push({
       filename: `output${i}-${today}.pdf`,
       path:
-        "https://control-location1.s3.amazonaws.com/" +
+        "https://control-location1.s3.amazonaws.com/reports/" +
         `output${i}-${today}.pdf`,
       //content: fs.createReadStream(__dirname +`/output${i}.pdf`),
       //contentType: 'application/pdf'
     });
   }
-  console.log("Attachments=" + attach);
+  console.log("Attachments=" + attach[0]);
 
   var mailOptions = {
     from: "softlinnsolutions@gmail.com",
