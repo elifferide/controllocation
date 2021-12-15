@@ -270,17 +270,17 @@ function generateHr(doc, y) {
 function generateTableRow(doc, y, c1, c2, c3, c4) {
   doc
     .fontSize(10)
-    .font("Times-Bold")
+    .font("public/fonts/OpenSans-Bold.ttf")
     .text("Adress:", 50, y - 45)
-    .font("Times-Roman")
+    .font("public/fonts/OpenSans-Regular.ttf")
     .text(c1, 120, y - 45, { width: 280 })
-    .font("Times-Bold")
+    .font("public/fonts/OpenSans-Bold.ttf")
     .text("Passed Time:", 50, y - 20)
-    .font("Times-Roman")
+    .font("public/fonts/OpenSans-Regular.ttf")
     .text(c2, 120, y - 20, { width: 280 })
-    .font("Times-Bold")
+    .font("public/fonts/OpenSans-Bold.ttf")
     .text("Description:", 50, y)
-    .font("Times-Roman")
+    .font("public/fonts/OpenSans-Regular.ttf")
     .text(c3, 120, y, { width: 280 })
     .image(c4, 450, y - 60, { align: "right", width: 80, height: 100 })
     .moveDown();
@@ -307,7 +307,7 @@ function sendMail(length, today) {
     to: "esali.softlinn@gmail.com",
     subject: "Reports( " + today + " )",
     html: "<b>Hello world attachment test HTML</b>",
-    attachments: attach,
+    //attachments: attach,
   };
   mail.sendMail(mailOptions, function (error, info) {
     if (error) {
