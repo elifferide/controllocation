@@ -132,7 +132,7 @@ async function createPdf(gelenVeri, user, index, planned, today) {
       var params = {
         Key: `output${index}-${today}.pdf`,
         Body: fileContent,
-        Bucket: "control-location1/reports/",
+        Bucket: "control-location1",
         ContentType: "application/pdf",
         ACL: "public-read",
       };
@@ -205,7 +205,7 @@ async function createPdf(gelenVeri, user, index, planned, today) {
       var params = {
         Key: `output${index}-${today}.pdf`,
         Body: fileContent,
-        Bucket: "control-location1/reports/",
+        Bucket: "control-location1",
         ContentType: "application/pdf",
         ACL: "public-read",
       };
@@ -294,7 +294,7 @@ function sendMail(length, today) {
     attach.push({
       filename: `output${i}-${today}.pdf`,
       path:
-        "https://control-location1.s3.amazonaws.com/reports/" +
+        "https://control-location1.s3.amazonaws.com/" +
         `output${i}-${today}.pdf`,
       //content: fs.createReadStream(__dirname +`/output${i}.pdf`),
       //contentType: 'application/pdf'
