@@ -132,7 +132,7 @@ async function createPdf(gelenVeri, user, index, planned, today) {
       var params = {
         Key: `output${index}-${today}.pdf`,
         Body: fileContent,
-        Bucket: "control-location1/reports",
+        Bucket: "control-location1/reports/",
         ContentType: "application/pdf",
         ACL: "public-read",
       };
@@ -205,7 +205,7 @@ async function createPdf(gelenVeri, user, index, planned, today) {
       var params = {
         Key: `output${index}-${today}.pdf`,
         Body: fileContent,
-        Bucket: "control-location1/reports",
+        Bucket: "control-location1/reports/",
         ContentType: "application/pdf",
         ACL: "public-read",
       };
@@ -307,7 +307,7 @@ function sendMail(length, today) {
     to: "esali.softlinn@gmail.com",
     subject: "Reports( " + today + " )",
     html: "<b>Hello world attachment test HTML</b>",
-    //attachments: attach,
+    attachments: attach,
   };
   mail.sendMail(mailOptions, function (error, info) {
     if (error) {
