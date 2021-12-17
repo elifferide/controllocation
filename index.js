@@ -86,11 +86,13 @@ app.post("/changePassword", function (req, res) {
   }
 });
 
+/*
 let cron = require("node-cron");
 cron.schedule("40 18 * * *", () => {
   console.log("Cron çalıştı");
   createPdfAndSendEmail();
 });
+*/
 
 const port = process.env.PORT || 5000;
 app.listen(port, () => {
